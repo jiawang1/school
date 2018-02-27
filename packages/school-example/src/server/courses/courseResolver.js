@@ -122,6 +122,37 @@ const courseSchema = `
 
 export { courseSchema };
 
+// const shouldRequest = (parent, info) => {
+//   if (!parent || !parent[info.fieldName]) {
+//     return true;
+//   }
+//   const currentNode = parent[info.fieldName];
+//   const selections = info.fieldNodes[0].selectionSet.selections;
+//   return selections.some(
+//     sel => sel.name.value !== '__typename' && currentNode[sel.name.value] === undefined
+//   );
+// };
+
+const constructTroopQuery = (selections, start) => {
+  if (!selections) return start;
+
+  let hasSibingSelection = false;
+  return selections.reduce((str, field) => {
+    if (field.name.value === '__typename') return str;
+    let query = str;
+    if (field.selectionSet) {
+      if (hasSibingSelection) {
+        query = `${query},.${field.name.value}`;
+      } else {
+        hasSibingSelection = true;
+        query = `${query}.${field.name.value}`;
+      }
+      return constructTroopQuery(field.selectionSet.selections, query);
+    }
+    return query;
+  }, start);
+};
+
 const typeResolver = {};
 
 ['student_level', 'student_course', 'student_unit', 'student_lesson'].forEach(_type => {
@@ -133,44 +164,40 @@ const typeResolver = {};
     })
     .join('');
   typeResolver[key] = (root, { id }, { currentContext }, info) => {
-    console.log(info);
-    let query = null;
+    // if (!shouldRequest(root, info)) {
+    //   return root[info.fieldName];
+    // }
+    let _query = null;
     if (id) {
-      query = id.map(_id => `${_type}!${id}`).join('|');
-      return troopClient.query(config.troopContext, `${query}`, currentContext);
-    } else if (root[key]) {
-      return troopClient
-        .query(config.troopContext, root[key].id, currentContext)
-        .then(res => res[0]);
+      _query = id.map(_id => `${_type}!${_id}`).join('|');
+    } else if (root[info.fieldName]) {
+      _query = root[info.fieldName].id;
     }
+    _query = constructTroopQuery(info.fieldNodes[0].selectionSet.selections, _query);
+    return troopClient.query(config.troopContext, `${_query}`, currentContext);
   };
 });
 
 const studentCourseEnrollment = (root, { id }, { currentContext }, info) => {
-  console.log('@@@@@@@@@');
-  console.log(info);
+  // if (!shouldRequest(root, info)) {
+  //   return root[info.fieldName];
+  // }
+
+  const selections = info.fieldNodes[0].selectionSet.selections;
+  let _query = null;
   if (id) {
-    return troopClient.query(
-      config.troopContext,
-      `student_course_enrollment!${id}`,
-      currentContext
-    );
+    _query = `student_course_enrollment!${id}`;
   } else if (root.courseLocation) {
-    return troopClient.query(config.troopContext, root.courseLocation.id, currentContext);
+    _query = root.courseLocation.id;
   }
+  _query = constructTroopQuery(selections, _query);
+
+  return troopClient.query(config.troopContext, _query, currentContext);
 };
 
 export default {
   Query: {
     studentCourseEnrollment,
     ...typeResolver
-  },
-
-  student_course_enrollment: {
-    ...typeResolver
-  },
-
-  student_course: {
-    courseLocation: studentCourseEnrollment
   }
 };

@@ -35,7 +35,7 @@ function startDevServer() {
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${baseConfig.webpackDevServerPort}`,
       'webpack/hot/only-dev-server',
-     // './styles/index.less',
+      // './styles/index.less',
       './index'
     ]
   };
@@ -62,15 +62,14 @@ function startDevServer() {
 
   new WebpackDevServer(webpack(devConfig), {
     publicPath: devConfig.output.publicPath,
-    contentBase: devConfig.devServer.contentBase,
-    proxy: devConfig.devServer.proxy,
     // chunkFilename: devConfig.output.chunkFilename,
     hot: true,
     noInfo: false,
     quiet: true,
     index: 'index.html',
     https: true,
-    historyApiFallback: true
+    historyApiFallback: true,
+    ...devConfig.devServer
   }).listen(baseConfig.webpackDevServerPort, err => {
     if (err) {
       console.error(err);

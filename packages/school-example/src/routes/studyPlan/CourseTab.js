@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { withApollo, graphql } from 'react-apollo';
-
 import gql from 'graphql-tag';
 
 class CourseTab extends Component {
   render() {
     const { data: { studentCourseEnrollment } } = this.props;
-
     console.log(studentCourseEnrollment);
     const enrollment = studentCourseEnrollment ? studentCourseEnrollment[0] : {};
     return (
@@ -31,6 +29,9 @@ const enrollmentQuery = gql`
       studentLevel {
         id
         levelName
+        children {
+          unitName
+        }
       }
       studentCourse {
         id
@@ -42,14 +43,6 @@ const enrollmentQuery = gql`
     }
   }
 `;
-
-// const enrollmentQuery = gql`{
-//   student_course_enrollment {
-//   studentLevel {
-//     id
-//   }
-// }}
-// `;
 
 export default graphql(enrollmentQuery, {
   options: {
