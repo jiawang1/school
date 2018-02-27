@@ -63,7 +63,6 @@ const buildCJS = () => {
     { plugins }
   );
 };
-
 const build = mode => {
   if (mode === 'development') {
     return buildESModule(mode);

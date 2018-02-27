@@ -1,0 +1,31 @@
+{
+  "name": "@school/school-dll",
+  "version": "0.1.0",
+  "description": "DLL shared for all packages",
+  "main": "./tools/buildDll.js",
+  "scripts": {
+    "dist": "node ./tools/buildDll.js",
+    "dev": "node ./tools/buildDll.js --dev"
+  },
+  "keywords": [
+    "DLL"
+  ],
+  "author": "Jay Wang",
+  "dependencies": {
+    "whatwg-fetch": "^2.0.3",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
+    "apollo-bridge-link": "^2.0.2",
+    "apollo-cache-inmemory": "^1.1.9",
+    "apollo-client": "^2.2.5",
+    "graphql": "^0.13.1",
+    "graphql-tag": "^2.8.0",
+    "react-apollo": "^2.0.4"
+  },
+  "devDependencies": {
+    "webpack": "^3.2.0"
+  },
+  "license": "MIT"
+}

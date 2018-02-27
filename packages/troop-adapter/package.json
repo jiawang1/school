@@ -1,15 +1,15 @@
 {
   "name": "@school/troop-adapter",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "support basic troop feature",
   "main": "dist/troop-adapter.bundle.js",
   "module": "es/troop-adapter.bundle.js",
   "jsnext:main": "es/troop-adapter.bundle.js",
   "scripts": {
-    "dist": "node ./tools/build.js -- --production",
+    "dist": "rollup -c --environment production",
     "test": "find ./test -name '*.test.js' | xargs ./node_modules/.bin/_mocha --recursive ",
     "st": "./node_modules/.bin/_mocha --",
-    "dev": "node ./tools/build.js"
+    "dev": "rollup -c --watch --environment development"
   },
   "author": "Wang jia",
   "dependencies": {

@@ -1,7 +1,6 @@
 /*eslint-disable*/
 const path = require('path');
 const fs = require('fs');
-const shell = require('shelljs');
 const util = require('util');
 const webpack = require('webpack');
 const exec = require('child_process').exec;
@@ -15,10 +14,10 @@ const params = process.argv.slice(2);
 const forceBuild = params.indexOf('--force') >= 0;
 
 const buildDLL = async () => {
-  let dllprojectsBuildPath = path.join(envirnPath, 'truant-dll');
+  let dllprojectsBuildPath = path.join(envirnPath, 'school-dll');
   const { err, stdout } = await execPromise(commandBuild, { cwd: dllprojectsBuildPath });
   if (err) {
-    console.log(`DLL building failed caused by:`);
+    console.error(`DLL building failed caused by:`);
     console.error(err);
     return false;
   }
@@ -29,8 +28,8 @@ const buildDLL = async () => {
  * this function used to build projects except project DLL
  * @param  {} files: projects folder
  */
-const runBuildParall = (files) => {
-  files.filter(f => f.indexOf('truant-dll') < 0 && f.indexOf('.') !== 0).map(f => {
+const runBuildParall = files => {
+  files.filter(f => f.indexOf('school-dll') < 0 && f.indexOf('.') !== 0).map(f => {
     let projectsBuildPath = path.join(envirnPath, f);
     let startTime = new Date().getTime();
     const child = exec(commandBuild, { cwd: projectsBuildPath });
@@ -40,7 +39,7 @@ const runBuildParall = (files) => {
         console.log(`${f} : ${data}`);
       });
       child.stderr.on('data', data => {
-        console.error(`${f} :  error ${data}`);
+        console.log(`${f} :  warning ${data}`);
       });
       child.on('error', error => {
         console.error(`build project ${f} failed`);
@@ -49,7 +48,7 @@ const runBuildParall = (files) => {
       });
       child.on('exit', code => {
         res();
-      })
+      });
     });
   });
 };
@@ -61,6 +60,7 @@ const runBuildParall = (files) => {
  */
 const buildProjects = async force => {
   if (force) {
+    console.log('all projects will be built');
     let files = fs.readdirSync(envirnPath);
     if (!await buildDLL()) {
       return;
@@ -73,9 +73,19 @@ const buildProjects = async force => {
       console.error(err);
       return;
     }
-    const projects = JSON.parse(stdout).map(project=>project.name);
+    console.log('following projects will be built : ');
+    const projects = JSON.parse(stdout).map(project => {
+      console.log(`project ${project.name}`);
+
+      /**
+       *  some projects published to internal NPM repo, so the
+       * project name start with @, but the file system does not has
+       * this kind of folder, so here remove prefix
+       */
+      return project.name.replace(/^@[^/]+\//, '');
+    });
     let files;
-    if (projects.some(project => project.indexOf('truant-dll') >= 0)) {
+    if (projects.some(project => project.indexOf('school-dll') >= 0)) {
       if (!await buildDLL()) {
         return;
       }

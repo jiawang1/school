@@ -1,0 +1,45 @@
+.study-plan {
+    margin: 20px;
+    &-section {
+        margin: 10px 2px;
+        .command-frame {
+            height: 300px;
+            overflow: auto;
+            margin: 10px 5px;
+            border: 1px solid #d9d9d9;
+            li {
+                padding: 3px 5px;
+                border-bottom: 1px solid #d9d9d9;
+            }
+        }
+        .t-header {
+            display: table-header-group;
+            vertical-align: middle;
+            border-color: inherit;
+            text-align: center;
+            border-bottom: 1px solid #d9d9d9;
+
+            tr{
+              height: 40px;
+              th{
+                text-align: center;
+                span{
+                  font-weight: bold;
+                }
+              }
+
+            }
+        }
+
+        tbody{
+          tr{
+            height:30px;
+            border-bottom: 1px solid #d9d9d9;
+            td{
+              border-left: 1px solid #d9d9d9;
+              border-right: 1px solid #d9d9d9;
+            }
+          }
+        }
+    }
+}

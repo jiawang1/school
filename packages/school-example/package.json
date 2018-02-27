@@ -1,0 +1,35 @@
+{
+  "name": "school-example",
+  "version": "0.1.0",
+  "description": "an example base on school",
+  "scripts": {
+    "start": "node ./tools/server.js",
+    "build": "node ./tools/build.js --build",
+    "dist": "node ./tools/build.js --dist",
+    "test": "find ./test -name '*.test.js' | xargs ./node_modules/.bin/_mocha --recursive ",
+    "st": "./node_modules/.bin/_mocha --",
+    "analyze": "node ./tools/build.js --dist -- --analyze",
+    "storybook": "start-storybook -p 9001 -c .storybook"
+  },
+  "author": "Wang jia",
+  "dependencies": {
+    "@school/troop-adapter": "^0.1.0",
+    "antd": "^3.2.1",
+    "apollo-link-context": "^1.0.7",
+    "apollo-link-state": "^0.4.0",
+    "graphql-type-json": "^0.2.0",
+    "lodash.merge": "^4.6.1",
+    "merge-graphql-schemas": "^1.4.0",
+    "style-loader": "^0.13.1",
+    "zen-observable": "^0.8.6"
+  },
+  "devDependencies": {
+    "@school/school-dll": "^0.1.0",
+    "@storybook/react": "^3.3.11",
+    "babel-plugin-import": "^1.6.5",
+    "mocha": "^4.0.1",
+    "webpack": "^3.2.0"
+  },
+  "license": "MIT",
+  "private": true
+}
