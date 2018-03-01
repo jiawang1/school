@@ -35,6 +35,11 @@ const courseSchema = `
     studentLesson:student_lesson
   }
 
+  type image {
+    id: String
+    url: String
+  }
+
   type progress{
     score: Int
     state:Int
@@ -43,6 +48,7 @@ const courseSchema = `
   }
 
   type student_lesson {
+    lessonImage: image
     progress: progress
     studentLessonId:String
     templateLessonId:Int
@@ -62,6 +68,7 @@ const courseSchema = `
   }
 
   type student_unit{
+    unitImage:image
     progress: progress
     studentUnitId: String
     templateUnitId: Int
@@ -113,25 +120,28 @@ const courseSchema = `
   type Query{
     studentCourseEnrollment(id:String!):[student_course_enrollment]
     studentLevel(id:[String]):[student_level]
+    studentLevelProgress(id:[String]):[progress]
     studentCourse(id:[String]):[student_course]
     studentUnit(id:[String]):[student_unit]
+    studentUnitProgress(id:[String]):[progress]
     studentLesson(id:[String]):[student_lesson]
+    studentLessonProgress(id:[String]):[progress]
   }
 
 `;
 
 export { courseSchema };
 
-// const shouldRequest = (parent, info) => {
-//   if (!parent || !parent[info.fieldName]) {
-//     return true;
-//   }
-//   const currentNode = parent[info.fieldName];
-//   const selections = info.fieldNodes[0].selectionSet.selections;
-//   return selections.some(
-//     sel => sel.name.value !== '__typename' && currentNode[sel.name.value] === undefined
-//   );
-// };
+const shouldRequest = (parent, info) => {
+  if (!parent || !parent[info.fieldName]) {
+    return true;
+  }
+  const currentNode = parent[info.fieldName];
+  const selections = info.fieldNodes[0].selectionSet.selections;
+  return selections.some(
+    sel => sel.name.value !== '__typename' && currentNode[sel.name.value] === undefined
+  );
+};
 
 const constructTroopQuery = (selections, start) => {
   if (!selections) return start;
@@ -155,18 +165,26 @@ const constructTroopQuery = (selections, start) => {
 
 const typeResolver = {};
 
-['student_level', 'student_course', 'student_unit', 'student_lesson'].forEach(_type => {
+[
+  'student_level',
+  'student_course',
+  'student_unit',
+  'student_lesson',
+  'student_lesson_progress',
+  'student_unit_progress',
+  'student_level_progress'
+].forEach(_type => {
   const key = _type
     .split('_')
     .map((k, inx) => {
-      if (inx === 1) return k[0].toUpperCase() + k.slice(1);
+      if (inx > 0) return k[0].toUpperCase() + k.slice(1);
       return k;
     })
     .join('');
   typeResolver[key] = (root, { id }, { currentContext }, info) => {
-    // if (!shouldRequest(root, info)) {
-    //   return root[info.fieldName];
-    // }
+    if (!shouldRequest(root, info)) {
+      return root[info.fieldName];
+    }
     let _query = null;
     if (id) {
       _query = id.map(_id => `${_type}!${_id}`).join('|');
@@ -179,9 +197,9 @@ const typeResolver = {};
 });
 
 const studentCourseEnrollment = (root, { id }, { currentContext }, info) => {
-  // if (!shouldRequest(root, info)) {
-  //   return root[info.fieldName];
-  // }
+  if (!shouldRequest(root, info)) {
+    return root[info.fieldName];
+  }
 
   const selections = info.fieldNodes[0].selectionSet.selections;
   let _query = null;

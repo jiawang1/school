@@ -17,14 +17,14 @@ const userSchema = `
     id:String
   }
   type Query{
-    currentUser(id:String!):[User]
+    user(id:String!):[User]
   }
 `;
 
 export { userSchema };
 export default {
   Query: {
-    currentUser: (root, { id }, { currentContext }) =>
+    user: (root, { id }, { currentContext }) =>
       troopClient.query(config.troopContext, `user!${id}`, currentContext)
   }
 };

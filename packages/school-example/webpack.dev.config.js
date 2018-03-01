@@ -1,12 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const DashboardPlugin = require('webpack-dashboard/plugin');
-const Dashboard = require('webpack-dashboard');
 const baseConfig = require('./base.config');
 const troopContext = require('./base.config').troopContext;
 
-const dashboard = new Dashboard();
 module.exports = {
   devtool: 'inline-source-map',
   cache: true,
@@ -39,8 +36,7 @@ module.exports = {
     new ExtractTextPlugin({ filename: 'styles.css' }),
     new webpack.DefinePlugin({
       ENV: '"dev"'
-    }),
-    new DashboardPlugin(dashboard.setData)
+    })
   ],
   module: {
     rules: [

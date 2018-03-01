@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 
 const contextQL = gql`
   query queryContext($id: String!) {
-    currentContext(id: $id) {
+    context(id: $id) {
       id
       values {
         countrycode {
@@ -41,8 +41,8 @@ const queryContext = async client => {
     variables: { id: 'current' }
   });
 
-  if (context.data && context.data.currentContext) {
-    return formatContext(context.data.currentContext[0]);
+  if (context.data && context.data.context) {
+    return formatContext(context.data.context[0]);
   }
 };
 

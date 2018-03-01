@@ -65,7 +65,6 @@ function startDevServer() {
     // chunkFilename: devConfig.output.chunkFilename,
     hot: true,
     noInfo: false,
-    quiet: true,
     index: 'index.html',
     https: true,
     historyApiFallback: true,

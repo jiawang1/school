@@ -29,6 +29,9 @@ const enrollmentQuery = gql`
       studentLevel {
         id
         levelName
+        progress {
+          score
+        }
         children {
           unitName
         }
