@@ -144,5 +144,10 @@ export default compose(
       variables: { id: 'current' }
     }
   }),
-  graphql(updateEnrollment, { name: 'updateEnrollment' })
+  graphql(updateEnrollment, {
+    name: 'updateEnrollment',
+    options: {
+      refetchQueries: ['queryEnrollment']
+    }
+  })
 )(withApollo(CourseTab));
