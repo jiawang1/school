@@ -1,27 +1,6 @@
 import { troopClient } from '@school/troop-adapter';
 import config from '../../../base.config';
 
-/**
- *
- *    """
-    lessonImage
-    progress
-    """
- *
- *
- *     """
-    unitImage
-    progress
-    """
- *
- *
- *
- *     """
-    levelTest
-    progress
-    """
- */
-
 const courseSchema = `
   type student_course_enrollment{
     id : String
@@ -143,24 +122,24 @@ const shouldRequest = (parent, info) => {
   );
 };
 
-const constructTroopQuery = (selections, start) => {
-  if (!selections) return start;
+const constructTroopQuery = (selections, parent) => {
+  if (!selections) return parent;
 
-  let hasSibingSelection = false;
+  let hasSibling = false;
   return selections.reduce((str, field) => {
     if (field.name.value === '__typename') return str;
     let query = str;
     if (field.selectionSet) {
-      if (hasSibingSelection) {
-        query = `${query},.${field.name.value}`;
+      if (hasSibling) {
+        query = `${query},${parent}.${field.name.value}`;
       } else {
-        hasSibingSelection = true;
+        hasSibling = true;
         query = `${query}.${field.name.value}`;
       }
       return constructTroopQuery(field.selectionSet.selections, query);
     }
     return query;
-  }, start);
+  }, parent);
 };
 
 const typeResolver = {};
@@ -191,7 +170,8 @@ const typeResolver = {};
     } else if (root[info.fieldName]) {
       _query = root[info.fieldName].id;
     }
-    _query = constructTroopQuery(info.fieldNodes[0].selectionSet.selections, _query);
+    _query += constructTroopQuery(info.fieldNodes[0].selectionSet.selections, '');
+
     return troopClient.query(config.troopContext, `${_query}`, currentContext);
   };
 });
@@ -208,8 +188,8 @@ const studentCourseEnrollment = (root, { id }, { currentContext }, info) => {
   } else if (root.courseLocation) {
     _query = root.courseLocation.id;
   }
-  _query = constructTroopQuery(selections, _query);
-
+  _query += constructTroopQuery(selections, '');
+  console.log(_query);
   return troopClient.query(config.troopContext, _query, currentContext);
 };
 
