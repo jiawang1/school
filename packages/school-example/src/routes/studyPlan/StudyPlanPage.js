@@ -14,7 +14,9 @@ const blurbList = ['450052', '443583', '150622'];
 class StudyPlanPage extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+
+    };
   }
   loadCommand() {
     const { client } = this.props;

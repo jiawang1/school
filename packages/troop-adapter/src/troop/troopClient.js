@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 import invariant from 'invariant';
-import { troopQuery } from './simpleQuery';
+import { troopQuery, troopCommand } from './simpleQuery';
 import utils from './utils';
 
 const mimeType = {
@@ -65,13 +65,13 @@ const postForm = async (url, body, option = {}) => {
       Accept: mimeType.all
     };
   }
-  let response = await post(url, _option, _body);
+  const response = await post(url, _option, _body);
   return response.json();
 };
 
-const query = (url, query, troopContext) => {
-  return troopQuery(url, query, troopContext);
-};
+const query = (url, query, options = {}) => troopQuery(url, query, options);
+
+const postCommand = (url, body, options = {}) => troopCommand(url, body, options);
 
 export const troopClient = {
   get,
@@ -79,5 +79,6 @@ export const troopClient = {
   put,
   DELETE,
   query,
+  postCommand,
   postForm
 };

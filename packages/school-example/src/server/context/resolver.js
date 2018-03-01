@@ -29,6 +29,8 @@ export { contextSchema };
 
 export default {
   Query: {
-    context: (root, { id }) => troopClient.query(config.troopContext, `context!${id}`)
+    context: (root, { id }) => {
+
+      return troopClient.query(config.troopQueryContext, `context!${id}`)}
   }
 };

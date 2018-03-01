@@ -23,17 +23,19 @@ module.exports = {
     contentBase: path.join(__dirname, 'src'),
     allowedHosts: [],
     /*eslint-enable*/
-    proxy: [{
-      context: [troopContext, '/login/secure.ashx'],
-      target: 'http://schooluat.englishtown.com',
-      secure: false,
-      cookieDomainRewrite: '',
-      onProxyReq: function onProxyReq(proxyReq, req, res) {
-        proxyReq.setHeader('Host', 'schooluat.englishtown.com');
-        proxyReq.setHeader('Referer', 'http://schooluat.englishtown.com/');
-        proxyReq.setHeader('Origin', 'http://schooluat.englishtown.com');
+    proxy: [
+      {
+        context: [troopContext, '/login/secure.ashx'],
+        target: 'http://schooluat.englishtown.com',
+        secure: false,
+        cookieDomainRewrite: '',
+        onProxyReq: function onProxyReq(proxyReq, req, res) {
+          proxyReq.setHeader('Host', 'schooluat.englishtown.com');
+          proxyReq.setHeader('Referer', 'http://schooluat.englishtown.com/');
+          proxyReq.setHeader('Origin', 'http://schooluat.englishtown.com');
+        }
       }
-    }]
+    ]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

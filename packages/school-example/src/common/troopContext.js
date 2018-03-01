@@ -57,7 +57,7 @@ const createContextLink = getClient =>
         query: contextQL,
         variables: { id: 'current' }
       });
-      return formatContext(_context.currentContext[0]);
+      return formatContext(_context.context[0]);
     } catch (err) {
       if (request.operationName !== 'queryContext') {
         return queryContext(client).catch(err => {

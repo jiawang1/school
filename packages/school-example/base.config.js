@@ -1,6 +1,7 @@
 module.exports = {
   defaultContext: '',
-  troopContext: '/services/api/proxy/queryproxy',
+  troopContext: '/services/api',
+  troopQueryContext: '/services/api/proxy/queryproxy',
   publicPath: '',
   manifestName: 'vendors-manifest.json',
   webpackDevServerPort: 8012,

@@ -1,5 +1,6 @@
 import { troopClient } from '@school/troop-adapter';
 import config from '../../../base.config';
+import { concat } from 'apollo-link';
 
 const userSchema = `
   type User {
@@ -24,7 +25,7 @@ const userSchema = `
 export { userSchema };
 export default {
   Query: {
-    user: (root, { id }, { currentContext }) =>
-      troopClient.query(config.troopContext, `user!${id}`, currentContext)
+    user: (root, { id }, { currentContext: troopContext }) =>
+      troopClient.query(config.troopQueryContext, `user!${id}`, { troopContext })
   }
 };

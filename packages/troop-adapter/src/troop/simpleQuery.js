@@ -2,6 +2,19 @@ import 'whatwg-fetch';
 import { parse2AST, ASTRewrite2Query } from './queryParser';
 import utils from './utils';
 
+const httpOption = {
+  method: 'post',
+  credentials: 'same-origin'
+};
+
+const queryHeader = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+const commandHeader = {
+  'Content-Type': 'application/json'
+};
+
 const __serialize = (node, oCache) => {
   let id;
   let value;
@@ -23,7 +36,8 @@ const __serialize = (node, oCache) => {
   if (utils.isArray(node)) {
     for (let i = 0, iMax = node.length; i < iMax; i++) {
       value = node[i];
-      result[i] = utils.isObject(value) || (utils.isArray(value) && value.length !== 0) ? __serialize(value, deserializeCache) : value;
+      result[i] =
+        utils.isObject(value) || (utils.isArray(value) && value.length !== 0) ? __serialize(value, deserializeCache) : value;
     }
   } else if (utils.isObject(node)) {
     Object.keys(node).forEach(key => {
@@ -31,7 +45,8 @@ const __serialize = (node, oCache) => {
         return;
       }
       value = node[key];
-      result[key] = utils.isObject(value) || (utils.isArray(value) && value.length !== 0) ? __serialize(value, deserializeCache) : value;
+      result[key] =
+        utils.isObject(value) || (utils.isArray(value) && value.length !== 0) ? __serialize(value, deserializeCache) : value;
     });
   }
   return result;
@@ -47,21 +62,6 @@ export const serialize = jsonNode => {
   }
   return oCache;
 };
-
-const __prepareHTTPOption = normalizeQuery =>
-  Object.assign(
-    {},
-    {
-      method: 'post',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    },
-    {
-      body: normalizeQuery.length > 0 ? 'q=' + encodeURIComponent(normalizeQuery.join('|')) : ''
-    }
-  );
 
 export const __prepareContextURL = (url, troopContext) => {
   if (!troopContext) return url;
@@ -80,7 +80,7 @@ export const __prepareContextURL = (url, troopContext) => {
   return `${_url}?${utils.encode(queryObject)}`;
 };
 
-export const troopQuery = (url, jointQuery, troopContext) => {
+export const troopQuery = async (url, jointQuery, options) => {
   const ids = [];
   const normalizeQuery = jointQuery.split('|').map((query, queryIndex) => {
     const ast = parse2AST(query);
@@ -90,17 +90,42 @@ export const troopQuery = (url, jointQuery, troopContext) => {
     }
     return ASTRewrite2Query(ast);
   });
-  const fetchOptions = __prepareHTTPOption(normalizeQuery);
-  const __url = __prepareContextURL(url, troopContext);
 
-  return fetch(__url, fetchOptions)
-    .then(response => response.json())
-    .then(json => {
-      const serialObject = serialize(json);
-      return ids.map(id => serialObject[id]);
-    })
-    .catch(err => {
-      console.error(err);
-      throw err;
-    });
+  const { troopContext, ...__options } = options;
+  const __url = __prepareContextURL(url, troopContext);
+  __options.headers = __options.headers ? { ...__options.headers, ...queryHeader } : queryHeader;
+
+  const fetchOptions = {
+    ...__options,
+    ...httpOption,
+    body: normalizeQuery.length > 0 ? 'q=' + encodeURIComponent(normalizeQuery.join('|')) : ''
+  };
+  try {
+    const response = await fetch(__url, fetchOptions);
+    let json = await response.json();
+    const serialObject = serialize(json);
+    return ids.map(id => serialObject[id]);
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
+export const troopCommand = async (url, content, options) => {
+  const body = typeof content === 'string' ? content : JSON.stringify(content);
+  const { troopContext, ...__options } = options;
+  const __url = __prepareContextURL(url, troopContext);
+  __options.headers = __options.headers ? { ...__options.headers, ...commandHeader } : commandHeader;
+  const fetchOptions = {
+    ...__options,
+    ...httpOption,
+    body
+  };
+  try {
+    const response = await fetch(__url, fetchOptions);
+    return response.json();
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };

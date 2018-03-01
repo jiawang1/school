@@ -107,6 +107,11 @@ const courseSchema = `
     studentLessonProgress(id:[String]):[progress]
   }
 
+  type Mutation{
+    updateCurrentEnrollment(templateId :String):student_course_enrollment
+
+  }
+
 `;
 
 export { courseSchema };
@@ -160,7 +165,7 @@ const typeResolver = {};
       return k;
     })
     .join('');
-  typeResolver[key] = (root, { id }, { currentContext }, info) => {
+  typeResolver[key] = (root, { id }, { currentContext: troopContext }, info) => {
     if (!shouldRequest(root, info)) {
       return root[info.fieldName];
     }
@@ -172,11 +177,11 @@ const typeResolver = {};
     }
     _query += constructTroopQuery(info.fieldNodes[0].selectionSet.selections, '');
 
-    return troopClient.query(config.troopContext, `${_query}`, currentContext);
+    return troopClient.query(config.troopQueryContext, `${_query}`, { troopContext });
   };
 });
 
-const studentCourseEnrollment = (root, { id }, { currentContext }, info) => {
+const studentCourseEnrollment = (root, { id }, { currentContext: troopContext }, info) => {
   if (!shouldRequest(root, info)) {
     return root[info.fieldName];
   }
@@ -189,13 +194,30 @@ const studentCourseEnrollment = (root, { id }, { currentContext }, info) => {
     _query = root.courseLocation.id;
   }
   _query += constructTroopQuery(selections, '');
-  console.log(_query);
-  return troopClient.query(config.troopContext, _query, currentContext);
+  return troopClient.query(config.troopQueryContext, _query, { troopContext });
 };
 
 export default {
   Query: {
     studentCourseEnrollment,
     ...typeResolver
+  },
+
+  Mutation: {
+    updateCurrentEnrollment: async (
+      root,
+      { templateId },
+      { currentContext: troopContext },
+      info
+    ) => {
+      const result = await troopClient.postCommand(
+        `${config.troopContext}/school/command/enrollment/updatecurrentenrollment`,
+        { templateId },
+        { troopContext }
+      );
+      return troopClient.query(config.troopQueryContext, `student_course_enrollment!current`, {
+        troopContext
+      });
+    }
   }
 };
