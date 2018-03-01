@@ -93,7 +93,7 @@ class StudyPlanPage extends Component {
     return (
       <TabPane tab="Basic" key="1">
         <div className="study-plan-section">
-          <div> current user : {data.currentUser ? data.currentUser[0].member_id : ''}</div>
+          <div> current user : {data.user ? data.user[0].member_id : ''}</div>
         </div>
         <div className="study-plan-section">
           <Button
@@ -127,7 +127,7 @@ class StudyPlanPage extends Component {
               this.loadSchema();
             }}
           >
-            load blurb
+            load services schema
           </Button>
 
           <div />

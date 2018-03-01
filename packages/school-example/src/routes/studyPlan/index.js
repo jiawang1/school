@@ -6,7 +6,7 @@ import StudyPlanPage from './StudyPlanPage';
 
 const userQuery = gql`
   query queryUser($id: String!) {
-    currentUser(id: $id) {
+    user(id: $id) {
       id
       member_id
       userName
