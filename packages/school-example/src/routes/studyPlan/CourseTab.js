@@ -4,9 +4,7 @@ import gql from 'graphql-tag';
 import { Tree, Button, Select } from 'antd';
 
 const TreeNode = Tree.TreeNode;
-
 const Option = Select.Option;
-
 const level = ['20000585', '20000527'];
 let seq = 0;
 
@@ -145,9 +143,9 @@ export default compose(
     }
   }),
   graphql(updateEnrollment, {
-    name: 'updateEnrollment',
-    options: {
-      refetchQueries: ['queryEnrollment']
-    }
+    name: 'updateEnrollment'
+    // options: {
+    //   refetchQueries: ['queryEnrollment']
+    // }
   })
 )(withApollo(CourseTab));

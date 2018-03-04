@@ -217,7 +217,7 @@ export default {
       );
       return troopClient.query(config.troopQueryContext, `student_course_enrollment!current`, {
         troopContext
-      });
+      }).then(results=>results[0]);
     }
   }
 };

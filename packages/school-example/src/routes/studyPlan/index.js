@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import StudyPlanPage from './StudyPlanPage';
 
 const userQuery = gql`
-  query queryUser($id: String!) {
+  query queryUser($id: String!){
     user(id: $id) {
       id
       member_id

@@ -77,6 +77,9 @@ class LogonPage extends Component {
                   id="userName"
                   addonBefore="User Name"
                   value={this.state.userName}
+                  onPressEnter={() => {
+                    this.handleLogon();
+                  }}
                   onChange={(...args) => {
                     this.handleInput(...args);
                   }}
@@ -89,6 +92,9 @@ class LogonPage extends Component {
                   id="password"
                   type="password"
                   addonBefore="Password"
+                  onPressEnter={() => {
+                    this.handleLogon();
+                  }}
                   value={this.state.password}
                   onChange={(...args) => {
                     this.handleInput(...args);

@@ -35,7 +35,6 @@ function startDevServer() {
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${baseConfig.webpackDevServerPort}`,
       'webpack/hot/only-dev-server',
-      // './styles/index.less',
       './index'
     ]
   };
@@ -72,8 +71,9 @@ function startDevServer() {
   }).listen(baseConfig.webpackDevServerPort, err => {
     if (err) {
       console.error(err);
+    } else {
+      console.log(`Listening at localhost:${baseConfig.webpackDevServerPort}`);
     }
-    console.log(`Listening at localhost:${baseConfig.webpackDevServerPort}`);
   });
 }
 
