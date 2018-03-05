@@ -3,7 +3,11 @@ import { ApolloLink } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import configLink from './configBridgeLink';
 import { createContextLink } from './troopContext';
-//import { withClientState } from 'apollo-link-state';
+// /import { withClientState } from 'apollo-link-state';
+
+// const cache = new InMemoryCache({
+//   addTypename: false
+// });
 
 const cache = new InMemoryCache();
 
@@ -13,12 +17,10 @@ const cache = new InMemoryCache();
  * @param  {} middlewares=[] : apollo links
  */
 const config = ({ schema, resolver }, middlewares = []) => {
-
   // const stateLink = withClientState({
   //   cache,
   //   resolvers: resolver
   // });
-
 
   const client = new ApolloClient({
     link: ApolloLink.from([
