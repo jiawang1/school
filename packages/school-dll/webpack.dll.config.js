@@ -20,7 +20,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ['react-hot-loader/webpack', 'babel-loader?cacheDirectory=true']
+        use: ['babel-loader?cacheDirectory=true']
       }
     ]
   }

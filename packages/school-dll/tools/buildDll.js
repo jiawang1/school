@@ -10,10 +10,10 @@ const oPackage = require(path.join(__dirname, '../', 'package.json'));
 const projectName = oPackage.name;
 const relativeTargetPath = path.join(__dirname, '../', distPath, projectName);
 /*eslint-enable*/
-
+const DLL_VAR_NAME = 'DLL';
 const params = process.argv.slice(2);
 const forceBuild = params.indexOf('--force') >= 0;
-const mode = params.indexOf('--dev') >= 0 ? 'dev' : 'dist';
+const mode = params[0].slice(2);
 
 const generateHash = () => {
   const nameVersions = dllConfig.entry.vendors
@@ -33,14 +33,15 @@ const cleanUp = target => {
   shell.mkdir(target);
 };
 
-function buildDll(env = 'dist') {
+function buildDll(env = 'production') {
   const dllHash = generateHash();
   const dllName = `vendors_${dllHash}`;
   const dllFileName = `${dllName}.dll.js`;
   console.log('dll name: ', dllName);
 
-  const targetPath = path.join(relativeTargetPath, env);
-  const manifestPath = path.join(relativeTargetPath, env, 'vendors-manifest.json');
+  const envpath = env =='production'?'dist':'dev';
+  const targetPath = path.join(relativeTargetPath, envpath);
+  const manifestPath = path.join(relativeTargetPath, envpath, 'vendors-manifest.json');
 
   return new Promise((resolve, reject) => {
     if (
@@ -55,16 +56,16 @@ function buildDll(env = 'dist') {
       dllConfig.output = {
         path: targetPath,
         filename: dllFileName,
-        library: dllName // reference to current dll, should be the same with dll plugin name
+        library: DLL_VAR_NAME // reference to current dll, should be the same with dll plugin name
       };
       const oEnvironment = {
         ENV: `"${env}"`,
         'process.env': {
-          NODE_ENV: JSON.stringify('production')
+          NODE_ENV: JSON.stringify(`${env}`)
         }
       };
 
-      if (env === 'dist') {
+      if (env === 'production') {
         dllConfig.plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
         dllConfig.plugins.push(new webpack.optimize.DedupePlugin());
         dllConfig.plugins.push(new webpack.optimize.UglifyJsPlugin());
@@ -74,7 +75,7 @@ function buildDll(env = 'dist') {
       dllConfig.plugins.push(
         new webpack.DllPlugin({
           path: manifestPath,
-          name: dllName,
+          name: DLL_VAR_NAME,
           context: path.join(__dirname, '../..')
         })
       );
@@ -83,7 +84,16 @@ function buildDll(env = 'dist') {
         if (err || stats.hasErrors()) {
           console.error('dll build failed:');
           console.error((err && err.stack) || stats.hasErrors());
-          reject(err || stats.hasErrors());
+          if(stats.hasErrors()){
+            const info = stats.toJson();
+            if (stats.hasErrors()) {
+              console.error(info.errors);
+              throw new Error(info.errors);
+            }
+            if (stats.hasWarnings()) {
+              console.log(info.warnings);
+            }
+          }
           console.log(`DLL build exit time ${new Date().getTime()}`);
           process.exit(1);
         }

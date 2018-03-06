@@ -1,5 +1,4 @@
 'use strict';
-
 /*eslint-disable*/
 const path = require('path');
 const fs = require('fs');
@@ -8,7 +7,6 @@ const webpack = require('webpack');
 const config = require('../webpack.dist.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseConfig = require('../base.config');
-
 const distFolder = path.join(__dirname, '../', baseConfig.distRelativePath);
 const dllFolder = path.join(__dirname, '../', baseConfig.dllRootFolder, 'dist');
 const projectName = require(path.join(__dirname, '../', 'package.json')).name;
@@ -16,6 +14,8 @@ const buildFolder = path.join(distFolder, projectName);
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /*eslint-enable*/
+
+const DLL_VAR_NAME = 'DLL';
 const params = process.argv.slice(2);
 const showAnalyze = params.indexOf('--analyze') >= 0;
 const contextRoot =
@@ -33,7 +33,7 @@ const timestamp = require('crypto')
   .createHash('md5')
   .update(new Date().getTime().toString())
   .digest('hex')
-  .substring(0, 8);
+  .substring(0, 10);
 
 const buildApp = () => {
   let manifestFile = null;
@@ -63,7 +63,8 @@ const buildApp = () => {
     new webpack.DllReferencePlugin({
       //  include dll
       manifest: manifestFile,
-      context: path.join(__dirname, '../..')
+      context: path.join(__dirname, '../..'),
+      name:DLL_VAR_NAME
     })
   );
   config.plugins.push(
@@ -78,16 +79,26 @@ const buildApp = () => {
   );
   const start = new Date().getTime();
   console.log(`start to build main resources at ${start}`);
-  webpack(config, err => {
-    if (err) {
-      console.error(err);
-      throw err;
+  webpack(config, (err, stats) => {
+    if (err || stats.hasErrors()) {
+      if (err) {
+        throw err;
+      } else {
+        const info = stats.toJson();
+        if (stats.hasErrors()) {
+          console.error(info.errors);
+          throw new Error(info.errors);
+        }
+        if (stats.hasWarnings()) {
+          console.log(info.warnings);
+        }
+      }
     } else {
       shell.mv(
         path.join(buildFolder, './static/index.html'),
         path.join(buildFolder, './index.html')
       );
-      console.log('Done, build time: ', new Date().getTime() - start, 'ms');
+      console.log('Done, build time: ', (new Date().getTime() - start) / 1000, 's');
     }
   });
 };
