@@ -5,6 +5,7 @@ const baseConfig = require('./base.config');
 const troopContext = require('./base.config').troopContext;
 
 module.exports = {
+  mode:'development',
   devtool: 'inline-source-map',
   cache: true,
   /*eslint-disable*/
@@ -18,6 +19,10 @@ module.exports = {
     publicPath: baseConfig.publicPath,
     chunkFilename: '[name].[chunkhash:8].chunk.js',
     sourceMapFilename: '[name].map'
+  },
+  resolve: {
+    mainFields:['browser','main', 'module'],
+    extensions: [".js", ".json", ".jsx"]
   },
   devServer: {
     contentBase: path.join(__dirname, 'src'),
@@ -42,7 +47,10 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({ filename: 'styles.css' }),
     new webpack.DefinePlugin({
-      ENV: '"dev"'
+      ENV: '"development"',
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
     })
   ],
   module: {

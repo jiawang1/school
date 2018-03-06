@@ -52,7 +52,9 @@ function buildDll(env = 'production') {
       delete require.cache[manifestPath]; // force reload the new manifest
       cleanUp(targetPath);
       console.log('vendors have changed, rebuilding dll...');
+      const startTime = Date.now();
 
+      dllConfig.mode = env;
       dllConfig.output = {
         path: targetPath,
         filename: dllFileName,
@@ -67,8 +69,6 @@ function buildDll(env = 'production') {
 
       if (env === 'production') {
         dllConfig.plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
-        dllConfig.plugins.push(new webpack.optimize.DedupePlugin());
-        dllConfig.plugins.push(new webpack.optimize.UglifyJsPlugin());
         dllConfig.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
       }
       dllConfig.plugins.push(new webpack.DefinePlugin(oEnvironment));
@@ -102,7 +102,7 @@ function buildDll(env = 'production') {
           dllFileName,
           targetPath
         });
-        console.log(`DLL build exit time ${new Date().getTime()}`);
+        console.log(`DLL build exit, it takes ${(new Date().getTime()- startTime)/1000} S`);
         process.exit(0);
       });
     } else {
@@ -111,7 +111,7 @@ function buildDll(env = 'production') {
         dllFileName,
         targetPath
       });
-      console.log(`DLL build exit time ${new Date().getTime()}`);
+      console.log(`DLL build exit, it takes ${(new Date().getTime()- startTime)/1000} S`);
       process.exit(0);
     }
   });

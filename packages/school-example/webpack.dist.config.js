@@ -1,21 +1,26 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
+  // mode:'development',
   devtool: false,
   context: path.join(__dirname, 'src'), // eslint-disable-line
   entry: {
-    main: ['./styles/index.less', './index']
+    main: ['./index']
   },
   output: {},
+  resolve: {
+    mainFields:['browser','main', 'module'],
+    extensions: [".js", ".json", ".jsx"]
+  },
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
     new ExtractTextPlugin({ filename: 'styles.css' }),
-    new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.DefinePlugin({
-      ENV: '"dist"',
+      ENV: '"production"',
       'process.env': {
         NODE_ENV: JSON.stringify('production')
       }
@@ -45,13 +50,25 @@ module.exports = {
                 plugins: loader => [require('autoprefixer')()]
               }
             },
-            { loader: 'less-loader', options: { sourceMap: true  , paths:[path.resolve(__dirname, "./src/styles")]} }
+            {
+              loader: 'less-loader',
+              options: {
+                paths: [path.resolve(__dirname, './src/styles')]
+              }
+            }
           ]
         })
       },
       {
         test: /\.css/,
-        use: [{ loader: 'style-loader' }, { loader: 'css-loader', options: { sourceMap: true } }]
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          }
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/,
