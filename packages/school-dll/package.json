@@ -4,8 +4,8 @@
   "description": "DLL shared for all packages",
   "main": "./tools/buildDll.js",
   "scripts": {
-    "dist": "node ./tools/buildDll.js",
-    "dev": "node ./tools/buildDll.js --dev"
+    "dist": "node ./tools/buildDll.js --production",
+    "dev": "node ./tools/buildDll.js --development"
   },
   "keywords": [
     "DLL"
@@ -25,7 +25,7 @@
     "react-apollo": "^2.0.4"
   },
   "devDependencies": {
-    "webpack": "^3.2.0"
+    "webpack": "^4.1.0"
   },
   "license": "MIT"
 }

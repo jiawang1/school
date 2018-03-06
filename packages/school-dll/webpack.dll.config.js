@@ -14,13 +14,16 @@ module.exports = {
       'whatwg-fetch'
     ]
   },
+  resolve: {
+    mainFields:['browser','main', 'module'],
+    extensions: [".js", ".json", ".jsx"]
+  },
   plugins: [],
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: ['react-hot-loader/webpack', 'babel-loader?cacheDirectory=true']
+        use: ['babel-loader?cacheDirectory=true']
       }
     ]
   }
