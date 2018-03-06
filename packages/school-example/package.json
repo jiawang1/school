@@ -13,7 +13,7 @@
   },
   "author": "Wang jia",
   "dependencies": {
-    "@school/troop-adapter": "^0.1.0",
+    "@shanghai/troop-adapter": "^0.1.0",
     "antd": "^3.2.1",
     "apollo-link-context": "^1.0.7",
     "graphql-type-json": "^0.2.0",
