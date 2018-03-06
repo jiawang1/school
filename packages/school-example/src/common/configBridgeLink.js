@@ -1,5 +1,5 @@
 import { createBridgeLink } from 'apollo-bridge-link';
-//mport { createBridgeLink } from './bridgeLink';
+//import { createBridgeLink } from './bridgeLink';
 
 const configLink = ({ schema, resolvers }) =>
   createBridgeLink({

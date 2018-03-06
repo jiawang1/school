@@ -20,7 +20,7 @@ render(
   root
 );
 
-if (module.hot) {
+if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept('./containers/Routes', () => {
     /*
        * must load the entry module here, therwise hot replaod can

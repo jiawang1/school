@@ -47,7 +47,10 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({ filename: 'styles.css' }),
     new webpack.DefinePlugin({
-      ENV: '"dev"'
+      ENV: '"development"',
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
     })
   ],
   module: {
