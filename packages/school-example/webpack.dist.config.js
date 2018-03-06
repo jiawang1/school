@@ -45,9 +45,13 @@ module.exports = {
                 plugins: loader => [require('autoprefixer')()]
               }
             },
-            'less-loader'
+            { loader: 'less-loader', options: { sourceMap: true  , paths:[path.resolve(__dirname, "./src/styles")]} }
           ]
         })
+      },
+      {
+        test: /\.css/,
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader', options: { sourceMap: true } }]
       },
       {
         test: /\.(png|jpg|gif)$/,

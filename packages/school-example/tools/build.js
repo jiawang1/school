@@ -53,7 +53,7 @@ const buildApp = () => {
   config.output = {
     path: path.join(buildFolder, './static'),
     filename: `[name].bundle.${timestamp}.js`,
-    publicPath: `${contextRoot}/_admin/static/`,
+    publicPath: `${contextRoot}/static/`,
     chunkFilename: '[name].[chunkhash:8].chunk.js'
   };
   if (showAnalyze) {
