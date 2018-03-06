@@ -1,6 +1,6 @@
 {
-  "name": "@school/troop-adapter",
-  "version": "0.1.0",
+  "name": "@shanghai/troop-adapter",
+  "version": "0.0.1",
   "description": "support basic troop feature",
   "main": "dist/troop-adapter.bundle.js",
   "module": "es/troop-adapter.bundle.js",

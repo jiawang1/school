@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { troopClient } from '@school/troop-adapter';
+import { troopClient } from '@shanghai/troop-adapter';
 import { withApollo } from 'react-apollo';
 import { Input, Col, Button } from 'antd';
 import { queryContext } from '../../common/troopContext';
