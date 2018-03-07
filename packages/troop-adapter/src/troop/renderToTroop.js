@@ -1,19 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import hoistStatics from 'hoist-non-react-statics';
-import { getTroopConnector } from './troopConnector';
+import getTroopConnector from './troopConnector';
 import TroopWrapper from './TroopWrapper';
 
-export const renderToTroop = (option = {}) => WrappedComponent => {
+const renderToTroop = (option = {}) => WrappedComponent => {
   const { sub } = option;
 
-  const wrap = WrappedComponent => {
-    return React.createElement(TroopWrapper, { asWrapper: true }, React.createElement(WrappedComponent));
+  const wrap = (TargetComponent, props = {}) => {
+    const _prop = { ...props, asWrapper: true };
+    return React.createElement(TroopWrapper, _prop, React.createElement(TargetComponent));
   };
 
   const connector = getTroopConnector();
-  connector.subscribe(sub, (option = {}) => {
-    const { node, ...props } = option;
-    ReactDOM.render(wrap(WrappedComponent), node);
+  connector.subscribe(sub, (ops = {}) => {
+    const { node, ...props } = ops;
+    ReactDOM.render(wrap(WrappedComponent, props), node);
   });
 };
+
+export default renderToTroop;

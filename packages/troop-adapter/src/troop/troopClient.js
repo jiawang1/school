@@ -16,7 +16,7 @@ const method = {
   put: 'PUT',
   DELETE: 'DELETE'
 };
-
+// eslint-disable-next-line
 const __fetch = _method => async (url, option, payload) => {
   invariant(url !== undefined, 'URL must be supplied');
   invariant(option !== undefined, 'HTTP request options must be supplied, ');

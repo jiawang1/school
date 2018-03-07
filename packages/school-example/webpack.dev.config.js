@@ -2,10 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const baseConfig = require('./base.config');
-const troopContext = require('./base.config').troopContext;
+const { troopContext } = require('./base.config');
 
 module.exports = {
-  mode:'development',
+  mode: 'development',
   devtool: 'inline-source-map',
   cache: true,
   /*eslint-disable*/
@@ -21,20 +21,20 @@ module.exports = {
     sourceMapFilename: '[name].map'
   },
   resolve: {
-    mainFields:['browser','main', 'module'],
-    extensions: [".js", ".json", ".jsx"]
+    mainFields: ['browser', 'main', 'module'],
+    extensions: ['.js', '.json', '.jsx']
   },
   devServer: {
     contentBase: path.join(__dirname, 'src'),
     allowedHosts: [],
-    /*eslint-enable*/
+    /* eslint-enable */
     proxy: [
       {
         context: [troopContext, '/login/secure.ashx'],
         target: 'http://schooluat.englishtown.com',
         secure: false,
         cookieDomainRewrite: '',
-        onProxyReq: function onProxyReq(proxyReq, req, res) {
+        onProxyReq: function onProxyReq(proxyReq) {
           proxyReq.setHeader('Host', 'schooluat.englishtown.com');
           proxyReq.setHeader('Referer', 'http://schooluat.englishtown.com');
           proxyReq.setHeader('Origin', 'http://schooluat.englishtown.com');
@@ -74,10 +74,13 @@ module.exports = {
             options: {
               ident: 'postcss',
               sourceMap: true,
-              plugins: loader => [require('autoprefixer')()]
+              plugins: () => [require('autoprefixer')()]
             }
           },
-          { loader: 'less-loader', options: { sourceMap: true  , paths:[path.resolve(__dirname, "./src/styles")]} }
+          {
+            loader: 'less-loader',
+            options: { sourceMap: true, paths: [path.resolve(__dirname, './src/styles')] }
+          }
         ]
       },
       {

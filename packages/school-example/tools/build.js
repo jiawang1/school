@@ -15,7 +15,7 @@ const buildFolder = path.join(distFolder, projectName);
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /* eslint-enable */
-
+/* eslint-disable no-console */
 const DLL_VAR_NAME = 'DLL';
 const params = process.argv.slice(2);
 const showAnalyze = params.indexOf('--analyze') >= 0;
@@ -35,6 +35,7 @@ const buildApp = () => {
   let manifestFile = null;
   let dllName = null;
   try {
+    // eslint-disable-next-line
     manifestFile = require(path.join(dllFolder, baseConfig.manifestName));
     [dllName] = fs
       .readdirSync(dllFolder)

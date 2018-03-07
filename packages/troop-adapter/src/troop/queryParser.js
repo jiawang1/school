@@ -115,7 +115,7 @@ export const ASTRewrite2Query = ast => {
         }
         break;
       default:
-      break;
+        break;
     }
   }
   return result;
