@@ -97,7 +97,7 @@ const courseSchema = `
   }
 
   type Query{
-    studentCourseEnrollment(id:String!):[student_course_enrollment]
+    student_course_enrollment(id:String!):[student_course_enrollment]
     studentLevel(id:[String]):[student_level]
     studentLevelProgress(id:[String]):[progress]
     studentCourse(id:[String]):[student_course]
@@ -181,25 +181,25 @@ const typeResolver = {};
   };
 });
 
-const studentCourseEnrollment = (root, { id }, { currentContext: troopContext }, info) => {
+const student_course_enrollment = (root, { id }, { currentContext: troopContext , query}, info) => {
   if (!shouldRequest(root, info)) {
     return root[info.fieldName];
   }
 
-  const selections = info.fieldNodes[0].selectionSet.selections;
+  const selection = query.definitions[0].selectionSet.selections[0];
   let _query = null;
   if (id) {
-    _query = `student_course_enrollment!${id}`;
+    _query = `${selection.name.value}!${id}`;
   } else if (root.courseLocation) {
     _query = root.courseLocation.id;
   }
-  _query += constructTroopQuery(selections, '');
+  _query += constructTroopQuery(selection.selectionSet.selections, '');
   return troopClient.query(config.troopQueryContext, _query, { troopContext });
 };
 
 export default {
   Query: {
-    studentCourseEnrollment,
+    student_course_enrollment,
     ...typeResolver
   },
 

@@ -18,9 +18,9 @@ class CourseTab extends Component {
   }
 
   componentWillReceiveProps(next) {
-    const { data: { studentCourseEnrollment = {} } } = next;
+    const { data: { student_course_enrollment = {} } } = next;
     this.setState({
-      data: studentCourseEnrollment
+      data: student_course_enrollment
     });
   }
 
@@ -57,8 +57,8 @@ class CourseTab extends Component {
   }
 
   render() {
-    const { data: { studentCourseEnrollment } } = this.props;
-    const enrollment = studentCourseEnrollment ? studentCourseEnrollment[0] : {};
+    const { data: { student_course_enrollment } } = this.props;
+    const enrollment = student_course_enrollment ? student_course_enrollment[0] : {};
     return (
       <div>
         <div>
@@ -87,7 +87,7 @@ class CourseTab extends Component {
 
 const enrollmentQuery = gql`
   query queryEnrollment($id: String!) {
-    studentCourseEnrollment(id: $id) {
+    student_course_enrollment(id: $id) {
       id
       studentCourseId
       studentLevelId
@@ -126,11 +126,13 @@ CourseTab.propTypes = {
 const updateEnrollment = gql`
   mutation updateEnrollment($templateId: String) {
     updateCurrentEnrollment(templateId: $templateId) {
-      id
-      studentCourseId
-      studentLevelId
-      studentUnitId
-      studentLessonId
+      student_course_enrollment {
+        id
+        studentCourseId
+        studentLevelId
+        studentUnitId
+        studentLessonId
+      }
     }
   }
 `;

@@ -5,7 +5,6 @@ module.exports = {
       'prop-types',
       'react-dom',
       'react-router-dom',
-      'apollo-bridge-link',
       'apollo-cache-inmemory',
       'apollo-client',
       'graphql',
