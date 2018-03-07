@@ -21,64 +21,53 @@ const stringifyPrimitive = v => {
   } else if (oType.isBoolean(v)) {
     return v ? 'true' : 'false';
   } else if (oType.isNumber(v)) {
-    return isFinite(v) ? v : '';
-  } else {
-    return '';
+    return isFinite(v) ? v : ''; // eslint-disable-line
   }
+  return '';
 };
 
 oType.encode = (obj, sep, eq) => {
-  sep = sep || '&';
-  eq = eq || '=';
-  if (obj === null) {
-    obj = undefined;
-  }
+  const _sep = sep || '&';
+  const _eq = eq || '=';
+  const _obj = obj === null ? undefined : obj;
 
-  if (oType.isObject(obj)) {
-    return Object.keys(obj)
-      .map(function(k) {
-        let ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
-        if (oType.isArray(obj[k])) {
-          return obj[k]
-            .map(function(v) {
-              return ks + encodeURIComponent(stringifyPrimitive(v));
-            })
-            .join(sep);
-        } else {
-          return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
+  if (oType.isObject(_obj)) {
+    return Object.keys(_obj)
+      .map(k => {
+        const ks = encodeURIComponent(stringifyPrimitive(k)) + _eq;
+        if (oType.isArray(_obj[k])) {
+          return _obj[k].map(v => ks + encodeURIComponent(stringifyPrimitive(v))).join(_sep);
         }
+        return ks + encodeURIComponent(stringifyPrimitive(_obj[k]));
       })
-      .join(sep);
+      .join(_sep);
   }
-
-  return encodeURIComponent(stringifyPrimitive(obj));
+  return encodeURIComponent(stringifyPrimitive(_obj));
 };
 
 oType.decode = (str, sep = '&', eq = '=', options) => {
-  let obj = {};
+  const obj = {};
 
   if (!oType.isString(str) || str.length === 0) {
     return obj;
   }
 
   const regexp = /\+/g;
-  str = str.split(sep);
+  const _aStr = str.split(sep);
 
   const maxKeys = options && oType.isNumber(options.maxKeys) ? options.maxKeys : 1000;
 
-  let len = str.length;
+  let len = _aStr.length;
   // maxKeys <= 0 means that we should not limit keys count
   if (maxKeys > 0 && len > maxKeys) {
     len = maxKeys;
   }
 
   for (let i = 0; i < len; ++i) {
-    let x = str[i].replace(regexp, '%20'),
-      idx = x.indexOf(eq),
-      kstr,
-      vstr,
-      k,
-      v;
+    const x = _aStr[i].replace(regexp, '%20');
+    const idx = x.indexOf(eq);
+    let kstr;
+    let vstr;
 
     if (idx >= 0) {
       kstr = x.substr(0, idx);
@@ -88,9 +77,10 @@ oType.decode = (str, sep = '&', eq = '=', options) => {
       vstr = '';
     }
 
-    k = decodeURIComponent(kstr);
-    v = decodeURIComponent(vstr);
+    const k = decodeURIComponent(kstr);
+    const v = decodeURIComponent(vstr);
 
+    // eslint-disable-next-line
     if (!obj.hasOwnProperty(k)) {
       obj[k] = v;
     } else if (oType.isArray(obj[k])) {

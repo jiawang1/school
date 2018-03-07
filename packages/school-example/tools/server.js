@@ -1,4 +1,5 @@
 'use strict';
+
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -14,15 +15,16 @@ const buildDLL = 'npm run dev';
 const dllRelativePath = `${baseConfig.dllRootFolder}/dev`;
 const dllFolder = path.join(__dirname, '../', dllRelativePath);
 const folderTmp = './src/_tmp/';
-
+/* eslint-disable no-console */
 function startDevServer() {
   // if DDL not exist, will throw error and trigger rebuild DLL
 
   let manifest;
   let dllName;
   try {
+    // eslint-disable-next-line
     manifest = require(path.join(dllFolder, baseConfig.manifestName));
-    dllName = fs.readdirSync(dllFolder).filter(file => file !== baseConfig.manifestName)[0];
+    [dllName] = fs.readdirSync(dllFolder).filter(file => file !== baseConfig.manifestName);
     shell.rm('-rf', folderTmp);
     shell.mkdir(folderTmp);
     shell.cp(`${dllFolder}/${dllName}`, folderTmp);

@@ -11,6 +11,7 @@ class TroopEventConnector {
     if (this.__isTroopReady()) {
       this.__registerTroopHandler();
     } else {
+      // eslint-disable-next-line
       const __handler = e => {
         this.__registerTroopHandler();
       };
@@ -18,7 +19,7 @@ class TroopEventConnector {
         document.addEventListener(STARTUPEVENT, __handler, false);
       } else if (window.attachEvent) {
         document.attachEvent(`on${STARTUPEVENT}`, __handler);
-      }else{
+      } else {
         throw new Error('too old browser, can not support');
       }
     }
@@ -35,11 +36,11 @@ class TroopEventConnector {
 
   __registerTroopHandler() {
     this.__troopHandler = window.requirejs.s.contexts['troopjs-2.0'].defined['troopjs-core/pubsub/hub'];
-    this.cache.sub.map(sub => {
+    this.cache.sub.forEach(sub => {
       this.__sub(sub.eventName, this.__troopHandler, sub.cb);
     });
     this.cache.sub = [];
-    this.cache.pub.map(pub => {
+    this.cache.pub.forEach(pub => {
       this.__troopHandler
         .publish(pub.eventName, pub.data)
         .then(args => pub.res(args))
@@ -52,13 +53,13 @@ class TroopEventConnector {
     return !!this.__troopHandler;
   }
 
-  __sub(eventName, context, cb){
+  __sub(eventName, context, cb) {
     const MEMORY_PREFIX = /^hub(:memory)?\//;
-    let _eventName = eventName.replace(MEMORY_PREFIX, '');
+    const _eventName = eventName.replace(MEMORY_PREFIX, '');
 
     this.__troopHandler.subscribe(_eventName, context, cb);
 
-    if(MEMORY_PREFIX.test(eventName.trim())){
+    if (MEMORY_PREFIX.test(eventName.trim())) {
       this.__troopHandler.republish(_eventName, false, context, cb);
     }
   }
@@ -73,19 +74,18 @@ class TroopEventConnector {
       });
     }
   }
-  publish(eventName, data) {
+  publish(eventName, data, cb) {
     if (this.isConnected()) {
       return this.__troopHandler.publish(eventName, data);
-    } else {
-      return new Promise((res, rej) => {
-        this.cache.pub.push({
-          eventName,
-          cb,
-          res,
-          rej
-        });
-      });
     }
+    return new Promise((res, rej) => {
+      this.cache.pub.push({
+        eventName,
+        cb,
+        res,
+        rej
+      });
+    });
   }
   unsubscribe(eventName, cb) {
     let inx = -1;
@@ -104,8 +104,6 @@ class TroopEventConnector {
 
 const tc = new TroopEventConnector();
 
-const getTroopConnector = () => {
-  return tc;
-};
+const getTroopConnector = () => tc;
 
-export { getTroopConnector };
+export default getTroopConnector;

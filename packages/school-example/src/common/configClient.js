@@ -26,7 +26,7 @@ const config = ({ schema, resolver }, middlewares = []) => {
     link: ApolloLink.from([
       createContextLink(() => client),
       ...middlewares,
-      //stateLink
+      // stateLink
       configLink({ schema, resolvers: resolver })
     ]),
     cache

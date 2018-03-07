@@ -11,7 +11,7 @@ const TO_RAW = '$2';
 export const parse2AST = (query = '') => {
   const _query = query;
   let index;
-  const length = _query.length;
+  const { length } = _query;
   let char;
   let mark = 0;
   let quote = null;
@@ -79,6 +79,7 @@ export const parse2AST = (query = '') => {
         // Set mark
         mark = index + 1;
         break;
+      default:
     }
   }
   // If there's an active op, store TEXT and push on _AST
@@ -93,12 +94,13 @@ export const parse2AST = (query = '') => {
 export const ASTRewrite2Query = ast => {
   let result = '';
   let root;
+  const { length } = ast.length;
   // Step through AST
-  for (let index = 0, length = ast.length; index < length; index++) {
+  for (let index = 0; index < length; index++) {
     const operation = ast[index];
     switch (operation.op) {
       case OP_ID:
-        //cache root node
+        // cache root node
         root = operation;
         // If this is the first OP_ID, there's no need to add OP_QUERY
         result += index === 0 ? operation.text : OP_QUERY + operation.text;
@@ -111,6 +113,8 @@ export const ASTRewrite2Query = ast => {
         if (index !== 0) {
           result += OP_QUERY + root.text;
         }
+        break;
+      default:
         break;
     }
   }

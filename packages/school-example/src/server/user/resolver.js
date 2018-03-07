@@ -1,6 +1,5 @@
-import { troopClient } from '@school/troop-adapter';
+import { troopClient } from '@shanghai/troop-adapter';
 import config from '../../../base.config';
-import { concat } from 'apollo-link';
 
 const userSchema = `
   type User {

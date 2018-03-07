@@ -1,5 +1,6 @@
 'use strict';
-/*eslint-disable*/
+
+/* eslint-disable */
 const path = require('path');
 const fs = require('fs');
 const shell = require('shelljs');
@@ -13,8 +14,8 @@ const projectName = require(path.join(__dirname, '../', 'package.json')).name;
 const buildFolder = path.join(distFolder, projectName);
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-/*eslint-enable*/
-
+/* eslint-enable */
+/* eslint-disable no-console */
 const DLL_VAR_NAME = 'DLL';
 const params = process.argv.slice(2);
 const showAnalyze = params.indexOf('--analyze') >= 0;
@@ -29,20 +30,16 @@ shell.rm('-rf', buildFolder);
 shell.mkdir(buildFolder);
 shell.mkdir(`${buildFolder}/static`);
 console.log(`clear dist folder ${buildFolder}`);
-const timestamp = require('crypto')
-  .createHash('md5')
-  .update(new Date().getTime().toString())
-  .digest('hex')
-  .substring(0, 10);
 
 const buildApp = () => {
   let manifestFile = null;
   let dllName = null;
   try {
+    // eslint-disable-next-line
     manifestFile = require(path.join(dllFolder, baseConfig.manifestName));
-    dllName = fs
+    [dllName] = fs
       .readdirSync(dllFolder)
-      .filter(file => file !== baseConfig.manifestName && !file.startsWith('.'))[0];
+      .filter(file => file !== baseConfig.manifestName && !file.startsWith('.'));
     console.log(`found manifest file ${path.join(dllFolder, baseConfig.manifestName)}`);
     console.log(`found DLL file ${dllName}`);
   } catch (err) {
@@ -52,9 +49,9 @@ const buildApp = () => {
   }
   config.output = {
     path: path.join(buildFolder, './static'),
-    filename: `[name].bundle.${timestamp}.js`,
+    filename: `[name].bundle.[hash:8].js`,
     publicPath: `${contextRoot}/static/`,
-    chunkFilename: '[name].[chunkhash:8].chunk.js'
+    chunkFilename: '[name].chunk.[chunkhash:8].js'
   };
   if (showAnalyze) {
     config.plugins.push(new BundleAnalyzerPlugin({ generateStatsFile: true }));
@@ -64,7 +61,7 @@ const buildApp = () => {
       //  include dll
       manifest: manifestFile,
       context: path.join(__dirname, '../..'),
-      name:DLL_VAR_NAME
+      name: DLL_VAR_NAME
     })
   );
   config.plugins.push(
@@ -82,6 +79,7 @@ const buildApp = () => {
   webpack(config, (err, stats) => {
     if (err || stats.hasErrors()) {
       if (err) {
+        console.error(err);
         throw err;
       } else {
         const info = stats.toJson();

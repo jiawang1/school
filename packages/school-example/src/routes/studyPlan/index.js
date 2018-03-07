@@ -1,11 +1,11 @@
 import { Route } from 'react-router-dom';
-import React, { Component } from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import StudyPlanPage from './StudyPlanPage';
 
 const userQuery = gql`
-  query queryUser($id: String!){
+  query queryUser($id: String!) {
     user(id: $id) {
       id
       member_id

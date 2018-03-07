@@ -9,15 +9,17 @@ const distPath = '../../dist';
 const oPackage = require(path.join(__dirname, '../', 'package.json'));
 const projectName = oPackage.name;
 const relativeTargetPath = path.join(__dirname, '../', distPath, projectName);
-/*eslint-enable*/
+/* eslint-enable */
 const DLL_VAR_NAME = 'DLL';
 const params = process.argv.slice(2);
 const forceBuild = params.indexOf('--force') >= 0;
 const mode = params[0].slice(2);
 
+/* eslint-disable no-console */
 const generateHash = () => {
   const nameVersions = dllConfig.entry.vendors
     .map(pkgName => {
+      // eslint-disable-next-line
       const pkgJson = require(path.join(pkgName.split('/')[0], 'package.json'));
       return `${pkgJson.name}_${pkgJson.version}`;
     })
@@ -39,7 +41,7 @@ function buildDll(env = 'production') {
   const dllFileName = `${dllName}.dll.js`;
   console.log('dll name: ', dllName);
 
-  const envpath = env =='production'?'dist':'dev';
+  const envpath = env === 'production' ? 'dist' : 'dev';
   const targetPath = path.join(relativeTargetPath, envpath);
   const manifestPath = path.join(relativeTargetPath, envpath, 'vendors-manifest.json');
 
@@ -47,7 +49,7 @@ function buildDll(env = 'production') {
     if (
       forceBuild ||
       !shell.test('-e', manifestPath) || // dll doesn't exist
-      require(manifestPath).name !== dllName // dll hash has changed
+      require(manifestPath).name !== dllName //  eslint-disable-line
     ) {
       delete require.cache[manifestPath]; // force reload the new manifest
       cleanUp(targetPath);
@@ -84,15 +86,17 @@ function buildDll(env = 'production') {
         if (err || stats.hasErrors()) {
           console.error('dll build failed:');
           console.error((err && err.stack) || stats.hasErrors());
-          if(stats.hasErrors()){
+          if (stats.hasErrors()) {
             const info = stats.toJson();
             if (stats.hasErrors()) {
               console.error(info.errors);
-              throw new Error(info.errors);
+              reject(info.errors);
             }
             if (stats.hasWarnings()) {
               console.log(info.warnings);
             }
+          } else {
+            reject(err);
           }
           console.log(`DLL build exit time ${new Date().getTime()}`);
           process.exit(1);
@@ -102,7 +106,7 @@ function buildDll(env = 'production') {
           dllFileName,
           targetPath
         });
-        console.log(`DLL build exit, it takes ${(new Date().getTime()- startTime)/1000} S`);
+        console.log(`DLL build exit, it takes ${(new Date().getTime() - startTime) / 1000} S`);
         process.exit(0);
       });
     } else {
@@ -111,7 +115,7 @@ function buildDll(env = 'production') {
         dllFileName,
         targetPath
       });
-      console.log(`DLL build exit, it takes ${(new Date().getTime()- startTime)/1000} S`);
+      console.log(`DLL build exit`);
       process.exit(0);
     }
   });

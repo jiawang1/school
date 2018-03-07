@@ -1,25 +1,24 @@
 import React from 'react';
-import { getTroopConnector } from './troopConnector';
 import PropTypes from 'prop-types';
+import getTroopConnector from './troopConnector';
 
 export default class TroopWrapper extends React.Component {
-  componentWillMount() {
-    this.connector = getTroopConnector();
-  }
-
   getChildContext() {
     return {
       connector: this.connector
     };
   }
 
+  componentWillMount() {
+    this.connector = getTroopConnector();
+  }
+
   render() {
     const { children, asWrapper, ...props } = this.props;
-    if(asWrapper){
-      return this.connector ? React.cloneElement(React.Children.only(children), props ) : null;
-    }else{
-      return this.connector ? React.Children.only(children) : null;
+    if (asWrapper) {
+      return this.connector ? React.cloneElement(React.Children.only(children), props) : null;
     }
+    return this.connector ? React.Children.only(children) : null;
   }
 }
 
@@ -29,5 +28,10 @@ TroopWrapper.childContextTypes = {
 };
 
 TroopWrapper.defaultProps = {
-  asWrapper:false
+  asWrapper: false
+};
+/* eslint-disable react/require-default-props */
+TroopWrapper.propTypes = {
+  children: PropTypes.object,
+  asWrapper: PropTypes.bool
 };

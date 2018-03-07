@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { troopClient } from '@school/troop-adapter';
+import { troopClient } from '@shanghai/troop-adapter';
+import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import { Input, Col, Button } from 'antd';
 import { queryContext } from '../../common/troopContext';
@@ -38,8 +39,8 @@ class LogonPage extends Component {
         .then(data => {
           if (data.success) {
             queryContext(client)
-              .then(data => {
-                console.log(data);
+              .then(_data => {
+                console.log(_data);
                 history.push('/studyplan');
               })
               .catch(err => {
@@ -50,8 +51,7 @@ class LogonPage extends Component {
               message: 'Logon failed'
             });
           }
-        })
-        .catch(err => {});
+        });
     } else {
       this.setState({
         message: 'Please input user name and password'
@@ -118,5 +118,10 @@ class LogonPage extends Component {
     );
   }
 }
+/* eslint-disable react/require-default-props */
+LogonPage.propTypes = {
+  history: PropTypes.object,
+  client: PropTypes.object
+};
 
 export default withApollo(withRouter(LogonPage));

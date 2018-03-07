@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
 import { withApollo } from 'react-apollo';
 import { Button, Tabs } from 'antd';
+import PropTypes from 'prop-types';
 import { queryCommand } from '../../services/commandService';
 import { querySchema } from '../../services/schemaService';
 import { queryBlurb } from '../../services/blurbService';
 import CourseTab from './CourseTab';
 import './StudyPlan.less';
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 const blurbList = ['450052', '443583', '150622'];
 
 class StudyPlanPage extends Component {
   constructor() {
     super();
-    this.state = {
-
-    };
+    this.state = {};
   }
   loadCommand() {
     const { client } = this.props;
@@ -77,14 +76,12 @@ class StudyPlanPage extends Component {
           </tr>
         </thead>
         <tbody>
-          {blurbs.map(blurb => {
-            return (
-              <tr key={blurb.id}>
-                <td style={{ textAlign: 'center' }}> {blurb.id} </td>
-                <td style={{ textAlign: 'center' }}> {blurb.translation} </td>
-              </tr>
-            );
-          })}
+          {blurbs.map(blurb => (
+            <tr key={blurb.id}>
+              <td style={{ textAlign: 'center' }}> {blurb.id} </td>
+              <td style={{ textAlign: 'center' }}> {blurb.translation} </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     );
@@ -156,5 +153,10 @@ class StudyPlanPage extends Component {
     );
   }
 }
+/* eslint-disable react/require-default-props */
+StudyPlanPage.propTypes = {
+  client: PropTypes.object,
+  data: PropTypes.object
+};
 
 export default withApollo(StudyPlanPage);
