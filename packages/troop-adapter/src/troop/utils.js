@@ -22,9 +22,8 @@ const stringifyPrimitive = v => {
     return v ? 'true' : 'false';
   } else if (oType.isNumber(v)) {
     return isFinite(v) ? v : '';
-  } else {
-    return '';
   }
+  return '';
 };
 
 oType.encode = (obj, sep, eq) => {
@@ -36,17 +35,12 @@ oType.encode = (obj, sep, eq) => {
 
   if (oType.isObject(obj)) {
     return Object.keys(obj)
-      .map(function(k) {
-        let ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
+      .map(k => {
+        const ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
         if (oType.isArray(obj[k])) {
-          return obj[k]
-            .map(function(v) {
-              return ks + encodeURIComponent(stringifyPrimitive(v));
-            })
-            .join(sep);
-        } else {
-          return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
+          return obj[k].map(v => ks + encodeURIComponent(stringifyPrimitive(v))).join(sep);
         }
+        return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
       })
       .join(sep);
   }
@@ -55,7 +49,7 @@ oType.encode = (obj, sep, eq) => {
 };
 
 oType.decode = (str, sep = '&', eq = '=', options) => {
-  let obj = {};
+  const obj = {};
 
   if (!oType.isString(str) || str.length === 0) {
     return obj;
@@ -73,12 +67,10 @@ oType.decode = (str, sep = '&', eq = '=', options) => {
   }
 
   for (let i = 0; i < len; ++i) {
-    let x = str[i].replace(regexp, '%20'),
-      idx = x.indexOf(eq),
-      kstr,
-      vstr,
-      k,
-      v;
+    const x = str[i].replace(regexp, '%20');
+    const idx = x.indexOf(eq);
+    let kstr;
+    let vstr;
 
     if (idx >= 0) {
       kstr = x.substr(0, idx);
@@ -88,8 +80,8 @@ oType.decode = (str, sep = '&', eq = '=', options) => {
       vstr = '';
     }
 
-    k = decodeURIComponent(kstr);
-    v = decodeURIComponent(vstr);
+    const k = decodeURIComponent(kstr);
+    const v = decodeURIComponent(vstr);
 
     if (!obj.hasOwnProperty(k)) {
       obj[k] = v;
