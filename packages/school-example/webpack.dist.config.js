@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   // mode:'development',
@@ -12,8 +11,8 @@ module.exports = {
   },
   output: {},
   resolve: {
-    mainFields:['browser','main', 'module'],
-    extensions: [".js", ".json", ".jsx"]
+    mainFields: ['browser', 'main', 'module'],
+    extensions: ['.js', '.json', '.jsx']
   },
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
@@ -47,7 +46,7 @@ module.exports = {
               loader: 'postcss-loader',
               options: {
                 ident: 'postcss',
-                plugins: loader => [require('autoprefixer')()]
+                plugins: () => [require('autoprefixer')()]
               }
             },
             {

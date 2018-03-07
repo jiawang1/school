@@ -28,9 +28,12 @@ module.exports = {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "comma-dangle": ["error", "never"],
     "arrow-parens": ["error", "as-needed"],
-    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-plusplus": "off",
     "no-underscore-dangle":[0],
     "class-methods-use-this":"off",
+    "import/no-extraneous-dependencies":"off",
+    "react/forbid-prop-types":"off",
+    "global-require":"off",
     "semi": [
       "error",
       "always"

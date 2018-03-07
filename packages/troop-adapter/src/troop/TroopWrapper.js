@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getTroopConnector } from './troopConnector';
+import getTroopConnector from './troopConnector';
 
 export default class TroopWrapper extends React.Component {
   getChildContext() {
@@ -29,4 +29,9 @@ TroopWrapper.childContextTypes = {
 
 TroopWrapper.defaultProps = {
   asWrapper: false
+};
+/* eslint-disable react/require-default-props */
+TroopWrapper.propTypes = {
+  children: PropTypes.object,
+  asWrapper: PropTypes.bool
 };

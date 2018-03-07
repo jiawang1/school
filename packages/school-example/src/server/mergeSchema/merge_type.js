@@ -1,6 +1,5 @@
 import { parse, print } from 'graphql';
 import { getDescription } from 'graphql/utilities/buildASTSchema';
-//import print from './utilities/astPrinter';
 import { isObjectTypeDefinition, isObjectSchemaDefinition } from './utilities/astHelpers';
 import { makeSchema, mergeableTypes } from './utilities/makeSchema';
 

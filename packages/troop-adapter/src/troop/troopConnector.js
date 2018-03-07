@@ -74,7 +74,7 @@ class TroopEventConnector {
       });
     }
   }
-  publish(eventName, data) {
+  publish(eventName, data, cb) {
     if (this.isConnected()) {
       return this.__troopHandler.publish(eventName, data);
     }
@@ -106,4 +106,4 @@ const tc = new TroopEventConnector();
 
 const getTroopConnector = () => tc;
 
-export { getTroopConnector };
+export default getTroopConnector;

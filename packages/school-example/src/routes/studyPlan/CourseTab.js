@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { withApollo, graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Tree, Button, Select } from 'antd';
+import { Tree, Select } from 'antd';
+import PropTypes from 'prop-types';
 
-const TreeNode = Tree.TreeNode;
-const Option = Select.Option;
-const level = ['20000585', '20000527'];
+const { TreeNode } = Tree;
+const { Option } = Select;
 let seq = 0;
 
 class CourseTab extends Component {
@@ -24,16 +24,12 @@ class CourseTab extends Component {
     });
   }
 
-  loadData(node) {
-    const { client } = this.props;
-  }
-
   updateEnrollment(e) {
     const { updateEnrollment } = this.props;
     if (this.templateId !== e) {
       updateEnrollment({
         variables: { templateId: e }
-      }).then(data => {
+      }).then(() => {
         this.templateId = e;
       });
     }
@@ -41,7 +37,7 @@ class CourseTab extends Component {
 
   renderTreeNodes(data) {
     const __renderNode = _data =>
-      Object.keys(_data).map((k, inx) => {
+      Object.keys(_data).map(k => {
         if (typeof _data[k] === 'object') {
           return (
             <TreeNode title={`${k}`} key={seq++} dataRef={_data[k]}>
@@ -49,9 +45,7 @@ class CourseTab extends Component {
             </TreeNode>
           );
         }
-        return (
-          <TreeNode title={`${k} : ${_data[k]}`} key={seq++} dataRef={_data[k]} isLeaf={true} />
-        );
+        return <TreeNode title={`${k} : ${_data[k]}`} key={seq++} dataRef={_data[k]} isLeaf />;
       });
 
     if (typeof data !== 'object' || data === null) return [];
@@ -123,6 +117,11 @@ const enrollmentQuery = gql`
     }
   }
 `;
+/* eslint-disable react/require-default-props */
+CourseTab.propTypes = {
+  updateEnrollment: PropTypes.func,
+  data: PropTypes.object
+};
 
 const updateEnrollment = gql`
   mutation updateEnrollment($templateId: String) {
