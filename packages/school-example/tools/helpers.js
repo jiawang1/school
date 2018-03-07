@@ -1,16 +1,11 @@
 'use strict';
 
 const path = require('path');
-//const _ = require('lodash');
 const shell = require('shelljs');
 const babel = require('babel-core');
 
 const babelOptions = {
-  presets: [
-    'es2015',
-    'react',
-    'babel-preset-stage-2'
-  ]
+  presets: ['es2015', 'react', 'babel-preset-stage-2']
 };
 module.exports = {
   readTemplate(name) {
@@ -18,16 +13,19 @@ module.exports = {
   },
 
   getLines(filePath) {
-    return shell.cat(filePath).split('\n').map(line => line.replace(/\r/g, ''));
+    return shell
+      .cat(filePath)
+      .split('\n')
+      .map(line => line.replace(/\r/g, ''));
   },
 
   removeLines(lines, str) {
-      //_.remove(lines, line => line.includes(str));
-      lines = lines.filter(line => !line.includes(str));
+    // eslint-disable-next-line
+    lines = lines.filter(line => !line.includes(str));
   },
 
   removeAstBlockNode(lines, node) {
-    const loc = node.loc;
+    const { loc } = node;
     let start = loc.start.line - 1;
     let len = loc.end.line - loc.start.line + 1;
     if (!lines[start - 1]) {
@@ -41,34 +39,24 @@ module.exports = {
   removeExportFunction(lines, funcName) {
     const code = lines.join('\n');
     const ast = babel.transform(code, babelOptions).ast.program;
-      const funcElement = Array.from(ast.body).find(_body=>{   return (_body.type === 'FunctionDeclaration'&& _body.id.name === funcName)});
-      //  _.find(ast.body, { type: 'FunctionDeclaration', id: { name: funcName } });
+    const funcElement = Array.from(ast.body).find(
+      _body => _body.type === 'FunctionDeclaration' && _body.id.name === funcName
+    );
+    //  _.find(ast.body, { type: 'FunctionDeclaration', id: { name: funcName } });
     if (funcElement) {
       this.removeAstBlockNode(lines, funcElement);
     }
   },
 
-  removeSwitchCase(lines, caseName) {
-    const code = lines.join('\n');
-    const ast = babel.transform(code, babelOptions).ast.program;
-    const funcElement = _.find(_.toArray(ast.body), { type: 'FunctionDeclaration', id: { name: 'reducer' } });
-    const switchElement = _.find(funcElement.body.body, { type: 'SwitchStatement' });
-    const caseElement = _.find(switchElement.cases, { test: { name: caseName } });
-    if (caseElement) {
-      this.removeAstBlockNode(lines, caseElement);
-    }
-  },
-
-    lineIndex(lines, str, fromIndex = 0) {
-
-            //return _.findIndex(lines, l => l.indexOf(str) >= 0, fromIndex || 0);
-        let __index =lines.slice(fromIndex).findIndex(l => {
-            if(typeof str === 'string'){
-                return l.indexOf(str) >= 0;
-            }else{
-                return str.test(l);
-            }});
-        return __index >= 0 : fromIndex + __index : fromIndex ;
+  lineIndex(lines, str, fromIndex = 0) {
+    // return _.findIndex(lines, l => l.indexOf(str) >= 0, fromIndex || 0);
+    const __index = lines.slice(fromIndex).findIndex(l => {
+      if (typeof str === 'string') {
+        return l.indexOf(str) >= 0;
+      }
+      return str.test(l);
+    });
+    return __index >= 0 ? fromIndex + __index : fromIndex;
   },
 
   // lastLineIndex(lines, str) {
@@ -87,7 +75,7 @@ module.exports = {
     return function toSave(filePath, fileContent) {
       filesToSave.push({
         path: filePath,
-        content: Array.isArray(fileContent) ? fileContent.join('\n') : fileContent,
+        content: Array.isArray(fileContent) ? fileContent.join('\n') : fileContent
       });
     };
   },
@@ -97,5 +85,5 @@ module.exports = {
     files.forEach(file => {
       shell.ShellString(file.content).to(file.path);
     });
-  },
+  }
 };
