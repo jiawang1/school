@@ -4,7 +4,7 @@ module.exports = {
     "commonjs": true,
     "es6": true
   },
-  "extends": ["eslint-config-airbnb"],
+  "extends": ["eslint-config-airbnb","prettier"],
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
@@ -20,10 +20,7 @@ module.exports = {
     "prettier"
   ],
   "rules": {
-    "indent": [
-      "error",
-      2
-    ],
+    "indent": "off",
     // "linebreak-style": [
     //     "error",
     //     "unix"
@@ -31,7 +28,9 @@ module.exports = {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "comma-dangle": ["error", "never"],
     "arrow-parens": ["error", "as-needed"],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-underscore-dangle":[0],
+    "class-methods-use-this":"off",
     "semi": [
       "error",
       "always"
