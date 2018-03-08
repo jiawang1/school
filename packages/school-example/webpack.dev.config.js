@@ -20,10 +20,10 @@ module.exports = {
     chunkFilename: '[name].[chunkhash:8].chunk.js',
     sourceMapFilename: '[name].map'
   },
-  resolve: {
-    mainFields: ['browser', 'main', 'module'],
-    extensions: ['.js', '.json', '.jsx']
-  },
+  // resolve: {
+  //   mainFields: ['browser', 'main', 'module'],
+  //   extensions: ['.js', '.json', '.jsx']
+  // },
   devServer: {
     contentBase: path.join(__dirname, 'src'),
     allowedHosts: [],

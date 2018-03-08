@@ -14,10 +14,10 @@ module.exports = {
       'whatwg-fetch'
     ]
   },
-  resolve: {
-    mainFields: ['browser', 'main', 'module'],
-    extensions: ['.js', '.json', '.jsx']
-  },
+  // resolve: {
+  //   mainFields: ['browser', 'main', 'module'],
+  //   extensions: ['.js', '.json', '.jsx']
+  // },
   plugins: [],
   module: {
     rules: [

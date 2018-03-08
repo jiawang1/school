@@ -10,10 +10,10 @@ module.exports = {
     main: ['./index']
   },
   output: {},
-  resolve: {
-    mainFields: ['browser', 'main', 'module'],
-    extensions: ['.js', '.json', '.jsx']
-  },
+  // resolve: {
+  //   mainFields: ['browser', 'main', 'module'],
+  //   extensions: ['.js', '.json', '.jsx']
+  // },
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
     new ExtractTextPlugin({ filename: 'styles.css' }),
