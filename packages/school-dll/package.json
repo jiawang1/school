@@ -20,7 +20,7 @@
     "apollo-bridge-link": "^2.0.2",
     "apollo-cache-inmemory": "^1.1.9",
     "apollo-client": "^2.2.5",
-    "graphql": "^0.13.1",
+    "graphql": "0.13.0",
     "graphql-tag": "^2.8.0",
     "react-apollo": "^2.0.4"
   },
