@@ -125,14 +125,12 @@ CourseTab.propTypes = {
 
 const updateEnrollment = gql`
   mutation updateEnrollment($templateId: String) {
-    updateCurrentEnrollment(templateId: $templateId) {
-      student_course_enrollment {
-        id
-        studentCourseId
-        studentLevelId
-        studentUnitId
-        studentLessonId
-      }
+    updateCurrentEnrollment(templateId: $templateId) @troop(type: "student_course_enrollment") {
+      id
+      studentCourseId
+      studentLevelId
+      studentUnitId
+      studentLessonId
     }
   }
 `;
