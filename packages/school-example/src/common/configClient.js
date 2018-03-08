@@ -7,11 +7,11 @@ import { createContextLink } from './troopContext';
 import createAsyncLink from 'apollo-link-async';
 import { resolve } from 'url';
 
-const cache = new InMemoryCache({
-  addTypename: false
-});
+// const cache = new InMemoryCache({
+//   addTypename: false
+// });
 
-//const cache = new InMemoryCache();
+const cache = new InMemoryCache();
 
 /**
  * @param  {} {schema  :  server side graphql schema

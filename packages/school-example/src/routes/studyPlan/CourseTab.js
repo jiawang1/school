@@ -93,24 +93,24 @@ const enrollmentQuery = gql`
       studentLevelId
       studentUnitId
       studentLessonId
-      studentLevel {
+      studentLevel @troop(type: "student_level") {
         id
         levelName
         templateLevelId
         progress {
           score
         }
-        children {
+        children @troop(type: "student_unit") {
           unitName
           progress {
             score
           }
         }
       }
-      studentCourse {
+      studentCourse @troop(type: "student_course") {
         id
         courseName
-        courseLocation {
+        courseLocation @troop(type: "student_course_enrollment") {
           id
         }
       }
