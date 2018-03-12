@@ -37,8 +37,31 @@ export const constructTroopQuery = (selections, parent) => {
  * @param  {} field
  */
 export const getSelection = (query, field) =>
+  query.definitions[0] &&
+  query.definitions[0].selectionSet &&
+  query.definitions[0].selectionSet.selections &&
   query.definitions[0].selectionSet.selections.find(sel => sel.name.value === field);
 
+/**
+ * @param  {} directives
+ */
+
+export const getTypeFromDirective = directives => {
+  let type = null;
+  directives.some(_dir => {
+    if (_dir.name.value === 'troop') {
+      return _dir.arguments.some(arg => {
+        if (arg.name.value === 'type') {
+          type = arg.value.value;
+          return true;
+        }
+        return false;
+      });
+    }
+    return false;
+  });
+  return type;
+};
 
 /**
  * @param  {} resolvers : customize graphql resolvers , used to supply data for data type or fields.
@@ -65,9 +88,15 @@ const createAsyncLink = (resolvers = {}, graphqlClient) => {
   };
 
   const getCommandFromCache = (cache, fieldName) => {
-    if (cache && cache.data && cache.data.data && cache.data.data['command:command!*']) {
+    if (
+      cache &&
+      cache.data &&
+      cache.data.data &&
+      cache.data.data['command:command!*'] &&
+      cache.data.data['command:command!*'].results
+    ) {
       const { results: { json } } = cache.data.data['command:command!*'];
-      return json[fieldName];
+      return json ? json[fieldName] : null;
     }
     return null;
   };
@@ -172,23 +201,6 @@ const createAsyncLink = (resolvers = {}, graphqlClient) => {
   };
 
   const findDefination = (name, defs) => defs.find(def => def.name.value === name);
-
-  const getTypeFromDirective = directives => {
-    let type = null;
-    directives.some(_dir => {
-      if (_dir.name.value === 'troop') {
-        return _dir.arguments.some(arg => {
-          if (arg.name.value === 'type') {
-            type = arg.value.value;
-            return true;
-          }
-          return false;
-        });
-      }
-      return false;
-    });
-    return type;
-  };
 
   const generateType = (data, definations, type) => {
     if (Array.isArray(data)) {
