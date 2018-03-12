@@ -7,6 +7,6 @@ import utilResolver, { utilSchema } from './utils/resolver';
 import courseResolver, { courseSchema } from './courses/courseResolver';
 
 const resolver = merge(userResolver, contextResolver, utilResolver, courseResolver);
-const schema = mergeTypes([userSchema, contextSchema, utilSchema, courseSchema]);
+//const schema = mergeTypes([userSchema, contextSchema, utilSchema, courseSchema]);
 
-export { schema, resolver };
+export { resolver };

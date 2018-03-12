@@ -20,10 +20,10 @@ module.exports = {
     chunkFilename: '[name].[chunkhash:8].chunk.js',
     sourceMapFilename: '[name].map'
   },
-  resolve: {
-    mainFields: ['browser', 'main', 'module'],
-    extensions: ['.js', '.json', '.jsx']
-  },
+  // resolve: {
+  //   mainFields: ['browser', 'main', 'module'],
+  //   extensions: ['.js', '.json', '.jsx']
+  // },
   devServer: {
     contentBase: path.join(__dirname, 'src'),
     allowedHosts: [],
@@ -31,13 +31,13 @@ module.exports = {
     proxy: [
       {
         context: [troopContext, '/login/secure.ashx'],
-        target: 'http://schooluat.englishtown.com',
+        target: 'http://www.englishtown.com',
         secure: false,
         cookieDomainRewrite: '',
         onProxyReq: function onProxyReq(proxyReq) {
-          proxyReq.setHeader('Host', 'schooluat.englishtown.com');
-          proxyReq.setHeader('Referer', 'http://schooluat.englishtown.com');
-          proxyReq.setHeader('Origin', 'http://schooluat.englishtown.com');
+          proxyReq.setHeader('Host', 'www.englishtown.com');
+          proxyReq.setHeader('Referer', 'http://www.englishtown.com');
+          proxyReq.setHeader('Origin', 'http://www.englishtown.com');
         }
       }
     ]

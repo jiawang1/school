@@ -5,7 +5,7 @@ const schemaQL = gql`
     __schema {
       types {
         name
-        kind
+        type
       }
     }
   }
