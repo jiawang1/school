@@ -44,12 +44,13 @@ const queryContext = async client => {
   if (context.data && context.data.context) {
     return formatContext(context.data.context[0]);
   }
+  return null;
 };
 
 const createContextLink = getClient =>
   setContext((request, previousContext) => {
     if (previousContext.currentContext) {
-      return;
+      return null;
     }
     const client = getClient();
     try {
@@ -58,12 +59,14 @@ const createContextLink = getClient =>
         variables: { id: 'current' }
       });
       return formatContext(_context.context[0]);
-    } catch (err) {
+    } catch (error) {
       if (request.operationName !== 'queryContext') {
         return queryContext(client).catch(err => {
           console.error(err);
+          throw err;
         });
       }
+      throw error;
     }
   });
 export { queryContext, createContextLink, contextQL };
