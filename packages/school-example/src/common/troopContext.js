@@ -62,7 +62,7 @@ const createContextLink = getClient =>
     } catch (error) {
       if (request.operationName !== 'queryContext') {
         return queryContext(client).catch(err => {
-          console.error(err);
+          console.error(err);   // eslint-disable-line
           throw err;
         });
       }
