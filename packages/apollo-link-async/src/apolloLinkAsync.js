@@ -68,7 +68,7 @@ export const getTypeFromDirective = directives => {
  *                        This resolver has higher priority than default resolver.
  * @param  {} graphqlClient : request client shoudl provide methods query and mutate
  */
-const createAsyncLink = (resolvers = {}, graphqlClient) => {
+const createAsyncLink = (graphqlClient, resolvers = {}) => {
   const schema = { types: [] };
 
   const defaultQueryResolver = (fieldName, rootValue, args, { currentContext, query }, info) => {

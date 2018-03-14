@@ -6,16 +6,6 @@ const blurbQL = gql`
       id
       translation
     }
-
-    studentLevel(id: ["3ecc6a0b-c18b-4112-a7cb-8da2cf061ae6"]) @troop(type: "student_level") {
-      __typename
-      studentLevelId
-      courseVersion
-      levelName
-      progress {
-        score
-      }
-    }
   }
 `;
 
