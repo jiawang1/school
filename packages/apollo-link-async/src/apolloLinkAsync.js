@@ -114,6 +114,7 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
       const mutationSelection = getSelection(query, fieldName);
       const body = mutationSelection.arguments.reduce(
         (_body, arg) => Object.assign({}, _body, { [arg.name.value]: args[arg.name.value] }),
+        // (_body, arg) => ({ ..._body, [arg.name.value]: args[arg.name.value] }),
         {}
       );
       if (command) {
@@ -127,16 +128,27 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
           if (!id) {
             throw new Error(`only query ${queryType} supplied, but no ID`);
           }
-          const querySel = Object.assign({}, mutationSelection, {
-            name: { kind: 'name', value: queryType }
-          });
+          // const querySel = Object.assign({}, mutationSelection, {
+          //   name: { kind: 'name', value: queryType }
+          // });
+
+          const querySel = { ...mutationSelection, name: { kind: 'name', value: queryType } };
           const selectionSet = { kind: 'SelectionSet', selections: [querySel] };
-          const def = Object.assign({}, query.definitions[0], {
+
+          // const def = Object.assign({}, query.definitions[0], {
+          //   kind: 'name',
+          //   value: queryType,
+          //   operation: 'query',
+          //   selectionSet
+          // });
+          const def = {
+            ...query.definitions[0],
             kind: 'name',
             value: queryType,
             operation: 'query',
             selectionSet
-          });
+          };
+
           const folkQuery = { definitions: [def], kind: 'Document' };
           // eslint-disable-next-line
           return resolver(queryType, {}, { id }, { currentContext, query: folkQuery, cache }, {});
@@ -236,7 +248,8 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
     request(operation) {
       const { setContext, query } = operation;
       let context = null;
-      context = Object.assign({}, operation.getContext(), { query });
+      // context = Object.assign({}, operation.getContext(), { query });
+      context = { ...operation.getContext(), query };
       setContext(context);
       return new Observable(observer => {
         const observerErrorHandler = observer.error.bind(observer);

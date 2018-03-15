@@ -1,12 +1,12 @@
 import merge from 'lodash.merge';
-//import GraphQLJSON from 'graphql-type-json';
-import mergeTypes from './mergeSchema/merge_type';
-import userResolver, { userSchema } from './user/resolver';
-import contextResolver, { contextSchema } from './context/resolver';
-import utilResolver, { utilSchema } from './utils/resolver';
-import courseResolver, { courseSchema } from './courses/courseResolver';
+// import GraphQLJSON from 'graphql-type-json';
+// import mergeTypes from './mergeSchema/merge_type';
+import userResolver from './user/resolver';
+import contextResolver from './context/resolver';
+import utilResolver from './utils/resolver';
+import courseResolver from './courses/courseResolver';
 
-const resolver = merge(userResolver, contextResolver, utilResolver, courseResolver);
-//const schema = mergeTypes([userSchema, contextSchema, utilSchema, courseSchema]);
+const resolvers = merge(userResolver, contextResolver, utilResolver, courseResolver);
+// const schema = mergeTypes([userSchema, contextSchema, utilSchema, courseSchema]);
 
-export { resolver };
+export default resolvers;
