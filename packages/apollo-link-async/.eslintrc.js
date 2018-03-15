@@ -7,24 +7,16 @@ module.exports = {
   "extends": ["eslint-config-airbnb","prettier"],
   "parserOptions": {
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
+      "experimentalObjectRestSpread": true
     },
     "ecmaVersion": 8,
     "sourceType": "module"
   },
   "plugins": [
-    "react",
-    "eslint-plugin-jsx-a11y",
-    "import",
     "prettier"
   ],
   "rules": {
     "indent": "off",
-    // "linebreak-style": [
-    //     "error",
-    //     "unix"
-    // ],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "comma-dangle": ["error", "never"],
     "arrow-parens": ["error", "as-needed"],

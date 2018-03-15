@@ -18,9 +18,9 @@ class CourseTab extends Component {
   }
 
   componentWillReceiveProps(next) {
-    const { data: { studentCourseEnrollment = {} } } = next;
+    const { data: { student_course_enrollment = {} } } = next; // eslint-disable-line
     this.setState({
-      data: studentCourseEnrollment
+      data: student_course_enrollment
     });
   }
 
@@ -28,7 +28,7 @@ class CourseTab extends Component {
     const { updateEnrollment } = this.props;
     if (this.templateId !== e) {
       updateEnrollment({
-        variables: { templateId: e }
+        variables: { templateId: e, enroll: [1, 2, 3, 4] }
       }).then(() => {
         this.templateId = e;
       });
@@ -57,8 +57,10 @@ class CourseTab extends Component {
   }
 
   render() {
-    const { data: { studentCourseEnrollment } } = this.props;
-    const enrollment = studentCourseEnrollment ? studentCourseEnrollment[0] : {};
+    // eslint-disable-next-line
+    const { data: { student_course_enrollment } } = this.props;
+    // eslint-disable-next-line
+    const enrollment = student_course_enrollment ? student_course_enrollment[0] : {};
     return (
       <div>
         <div>
@@ -87,30 +89,30 @@ class CourseTab extends Component {
 
 const enrollmentQuery = gql`
   query queryEnrollment($id: String!) {
-    studentCourseEnrollment(id: $id) {
+    student_course_enrollment(id: $id) {
       id
       studentCourseId
       studentLevelId
       studentUnitId
       studentLessonId
-      studentLevel {
+      studentLevel @troop(type: "student_level") {
         id
         levelName
         templateLevelId
         progress {
           score
         }
-        children {
+        children @troop(type: "student_unit") {
           unitName
           progress {
             score
           }
         }
       }
-      studentCourse {
+      studentCourse @troop(type: "student_course") {
         id
         courseName
-        courseLocation {
+        courseLocation @troop(type: "student_course_enrollment") {
           id
         }
       }
@@ -125,7 +127,12 @@ CourseTab.propTypes = {
 
 const updateEnrollment = gql`
   mutation updateEnrollment($templateId: String) {
-    updateCurrentEnrollment(templateId: $templateId) {
+    updateEnrollment(templateId: $templateId)
+      @troop(
+        type: "student_course_enrollment"
+        id: "current"
+        command: "school/enrollment/UpdateCurrentEnrollment"
+      ) {
       id
       studentCourseId
       studentLevelId

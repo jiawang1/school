@@ -22,7 +22,7 @@ const __serialize = (node, oCache) => {
   let result = node;
 
   if ('id' in node) {
-    id = node.id;
+     id = node.id; // eslint-disable-line
     if (Object.prototype.hasOwnProperty.call(deserializeCache, id)) {
       result = deserializeCache[id];
       if (node.collapsed) {
@@ -98,11 +98,11 @@ export const troopQuery = async (url, jointQuery, options) => {
   const fetchOptions = {
     ...__options,
     ...httpOption,
-    body: normalizeQuery.length > 0 ? 'q=' + encodeURIComponent(normalizeQuery.join('|')) : ''
+    body: normalizeQuery.length > 0 ? `q=${encodeURIComponent(normalizeQuery.join('|'))}` : ''
   };
   try {
     const response = await fetch(__url, fetchOptions);
-    let json = await response.json();
+    const json = await response.json();
     const serialObject = serialize(json);
     return ids.map(id => serialObject[id]);
   } catch (err) {

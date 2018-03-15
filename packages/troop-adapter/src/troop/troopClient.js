@@ -20,8 +20,8 @@ const method = {
 const __fetch = _method => async (url, option, payload) => {
   invariant(url !== undefined, 'URL must be supplied');
   invariant(option !== undefined, 'HTTP request options must be supplied, ');
-  let __url = url;
-  let ops = Object.assign(
+  const __url = url;
+  const ops = Object.assign(
     {},
     {
       credentials: 'same-origin'
@@ -55,10 +55,10 @@ const postForm = async (url, body, option = {}) => {
   invariant(url !== undefined, 'URL must be supplied');
   invariant(body !== undefined, 'HTTP request payload mest be supplied');
   const _body = typeof body === 'string' ? body : utils.encode(body);
-  let _option = option;
+  const _option = option;
   if (_option.headers) {
     _option.headers['Content-Type'] = mimeType.form;
-    _option.headers['Accept'] = mimeType.all;
+    _option.headers.Accept = mimeType.all;
   } else {
     _option.headers = {
       'Content-Type': mimeType.form,
@@ -69,7 +69,7 @@ const postForm = async (url, body, option = {}) => {
   return response.json();
 };
 
-const query = (url, query, options = {}) => troopQuery(url, query, options);
+const query = (url, queryStr, options = {}) => troopQuery(url, queryStr, options);
 
 const postCommand = (url, body, options = {}) => troopCommand(url, body, options);
 

@@ -44,12 +44,15 @@ const queryContext = async client => {
   if (context.data && context.data.context) {
     return formatContext(context.data.context[0]);
   }
+  return null;
 };
 
-const createContextLink = getClient =>
-  setContext((request, previousContext) => {
+const createContextLink = getClient => {
+  let initialized = false;
+
+  return setContext((request, previousContext) => {
     if (previousContext.currentContext) {
-      return;
+      return previousContext.currentContext;
     }
     const client = getClient();
     try {
@@ -58,12 +61,26 @@ const createContextLink = getClient =>
         variables: { id: 'current' }
       });
       return formatContext(_context.context[0]);
-    } catch (err) {
+    } catch (error) {
       if (request.operationName !== 'queryContext') {
         return queryContext(client).catch(err => {
-          console.error(err);
+          console.error(err); // eslint-disable-line
+          throw err;
         });
+      }
+      if (initialized) {
+        // eslint-disable-next-line
+        console.error(`failed to retrieve troop context from cache`);
+        throw error;
+      } else {
+        /* here do not raise exception out since if query is queryContext
+         client.readQuery will raise exception since no context info
+         in the cache for the first time.
+      */
+        initialized = true;
+        return null;
       }
     }
   });
+};
 export { queryContext, createContextLink, contextQL };

@@ -94,7 +94,7 @@ export const parse2AST = (query = '') => {
 export const ASTRewrite2Query = ast => {
   let result = '';
   let root;
-  const { length } = ast.length;
+  const { length } = ast;
   // Step through AST
   for (let index = 0; index < length; index++) {
     const operation = ast[index];

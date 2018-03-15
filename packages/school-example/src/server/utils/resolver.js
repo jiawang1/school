@@ -26,9 +26,10 @@ export default {
       troopClient.query(config.troopQueryContext, `command!${id}`, { troopContext }),
 
     blurb: (root, { id = [] }, { currentContext: troopContext }) => {
-      const _troopquery = id.reduce((str, cur) => {
-        return str.length > 0 ? `${str}|blurb!${cur}` : `blurb!${cur}`;
-      }, '');
+      const _troopquery = id.reduce(
+        (str, cur) => (str.length > 0 ? `${str}|blurb!${cur}` : `blurb!${cur}`),
+        ''
+      );
       return troopClient.query(config.troopQueryContext, _troopquery, { troopContext });
     }
   }

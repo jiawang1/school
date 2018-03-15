@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import { Input, Col, Button } from 'antd';
 import { queryContext } from '../../common/troopContext';
+import { queryCommand } from '../../services/commandService';
 import './LogonPage.less';
 
 const InputGroup = Input.Group;
@@ -38,12 +39,13 @@ class LogonPage extends Component {
         })
         .then(data => {
           if (data.success) {
-            queryContext(client)
-              .then(_data => {
-                console.log(_data);
+            queryCommand(client)
+              .then(() => queryContext(client))
+              .then(() => {
                 history.push('/studyplan');
               })
               .catch(err => {
+                // eslint-disable-next-line
                 console.error(err);
               });
           } else {

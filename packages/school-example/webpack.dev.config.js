@@ -31,13 +31,13 @@ module.exports = {
     proxy: [
       {
         context: [troopContext, '/login/secure.ashx'],
-        target: 'http://schooluat.englishtown.com',
+        target: 'http://www.englishtown.com',
         secure: false,
         cookieDomainRewrite: '',
         onProxyReq: function onProxyReq(proxyReq) {
-          proxyReq.setHeader('Host', 'schooluat.englishtown.com');
-          proxyReq.setHeader('Referer', 'http://schooluat.englishtown.com');
-          proxyReq.setHeader('Origin', 'http://schooluat.englishtown.com');
+          proxyReq.setHeader('Host', 'www.englishtown.com');
+          proxyReq.setHeader('Referer', 'http://www.englishtown.com');
+          proxyReq.setHeader('Origin', 'http://www.englishtown.com');
         }
       }
     ]

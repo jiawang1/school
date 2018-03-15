@@ -20,11 +20,15 @@ class StudyPlanPage extends Component {
   loadCommand() {
     const { client } = this.props;
 
-    queryCommand(client).then(data => {
-      this.setState({
-        command: data.data.command[0]
+    queryCommand(client)
+      .then(data => {
+        this.setState({
+          command: data.data.command[0]
+        });
+      })
+      .catch(err => {
+        console.log(err);
       });
-    });
   }
 
   loadBlurb() {
