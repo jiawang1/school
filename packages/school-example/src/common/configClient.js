@@ -4,7 +4,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createAsyncLink /* , createProgressLink */ } from '@shanghai/apollo-link-async';
 import { troopClient } from '@shanghai/troop-adapter';
 import { createContextLink } from './troopContext';
-import baseConfig from '../../base.config';
+import baseConfig from '../../config/base.config';
 
 const cache = new InMemoryCache();
 

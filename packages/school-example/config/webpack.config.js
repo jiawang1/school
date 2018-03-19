@@ -1,30 +1,22 @@
 const path = require('path');
-const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const contextPath = path.join(__dirname, '../src');
+
 module.exports = {
-  // mode:'development',
-  devtool: false,
-  context: path.join(__dirname, 'src'), // eslint-disable-line
-  entry: {
-    main: ['./index']
+  context: contextPath,
+  resolve: {
+    alias: {
+      ...['components', 'resolver', 'services', 'common', 'routes', 'containers'].reduce(
+        (obj, key) => {
+          // eslint-disable-next-line
+          obj[key] = `${contextPath}/${key}`;
+          return obj;
+        },
+        {}
+      )
+    }
   },
-  output: {},
-  // resolve: {
-  //   mainFields: ['browser', 'main', 'module'],
-  //   extensions: ['.js', '.json', '.jsx']
-  // },
-  plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new ExtractTextPlugin({ filename: 'styles.css' }),
-    new webpack.optimize.AggressiveMergingPlugin(),
-    new webpack.DefinePlugin({
-      ENV: '"production"',
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    })
-  ],
   module: {
     rules: [
       {
@@ -52,7 +44,7 @@ module.exports = {
             {
               loader: 'less-loader',
               options: {
-                paths: [path.resolve(__dirname, './src/styles')]
+                paths: [path.resolve(__dirname, '../src/styles')]
               }
             }
           ]

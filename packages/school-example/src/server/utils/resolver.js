@@ -1,5 +1,5 @@
 import { troopClient } from '@shanghai/troop-adapter';
-import config from '../../../base.config';
+import config from '../../../config/base.config';
 
 const utilSchema = `
 scalar JSON

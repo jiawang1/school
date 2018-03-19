@@ -11,3 +11,4 @@ src/_tmp/**
 **.log
 **package-lock.json
 **/graphqlService/**
+**/config/base.config.dev.js

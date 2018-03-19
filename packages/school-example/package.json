@@ -24,7 +24,7 @@
     "zen-observable": "^0.8.6"
   },
   "devDependencies": {
-    "@school/school-dll": "^0.1.0",
+    "@shanghai/school-dll": "^0.1.0",
     "@storybook/react": "^3.3.11",
     "babel-plugin-import": "^1.6.5",
     "mocha": "^5.0.1",

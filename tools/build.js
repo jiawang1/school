@@ -1,4 +1,4 @@
-/*eslint-disable*/
+/* eslint-disable */
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -8,14 +8,14 @@ const execPromise = util.promisify(exec);
 const commandDiff = 'lerna updated --json';
 let envirnPath = path.join(__dirname, '../packages');
 let commandBuild = 'npm run dist';
-/*eslint-enable*/
+/* eslint-enable */
 
 const params = process.argv.slice(2);
 const forceBuild = params.indexOf('--force') >= 0;
 
 const buildDLL = async () => {
-  let dllprojectsBuildPath = path.join(envirnPath, 'school-dll');
-  const { err, stdout } = await execPromise(commandBuild, { cwd: dllprojectsBuildPath });
+  const dllprojectsBuildPath = path.join(envirnPath, 'school-dll');
+  const { err } = await execPromise(commandBuild, { cwd: dllprojectsBuildPath });
   if (err) {
     console.error(`DLL building failed caused by:`);
     console.error(err);
@@ -30,8 +30,7 @@ const buildDLL = async () => {
  */
 const runBuildParall = files => {
   files.filter(f => f.indexOf('school-dll') < 0 && f.indexOf('.') !== 0).map(f => {
-    let projectsBuildPath = path.join(envirnPath, f);
-    let startTime = new Date().getTime();
+    const projectsBuildPath = path.join(envirnPath, f);
     const child = exec(commandBuild, { cwd: projectsBuildPath });
 
     return new Promise((res, rej) => {
@@ -46,7 +45,7 @@ const runBuildParall = files => {
         console.error(error);
         rej(error);
       });
-      child.on('exit', code => {
+      child.on('exit', () => {
         res();
       });
     });
@@ -61,13 +60,12 @@ const runBuildParall = files => {
 const buildProjects = async force => {
   if (force) {
     console.log('all projects will be built');
-    let files = fs.readdirSync(envirnPath);
+    const files = fs.readdirSync(envirnPath);
     if (!await buildDLL()) {
       return;
     }
     runBuildParall(files);
   } else {
-    let buildCommand = null;
     const { err, stdout } = await execPromise(commandDiff);
     if (err) {
       console.error(err);

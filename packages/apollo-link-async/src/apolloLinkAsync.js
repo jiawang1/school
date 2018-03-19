@@ -114,7 +114,6 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
       const mutationSelection = getSelection(query, fieldName);
       const body = mutationSelection.arguments.reduce(
         (_body, arg) => Object.assign({}, _body, { [arg.name.value]: args[arg.name.value] }),
-        // (_body, arg) => ({ ..._body, [arg.name.value]: args[arg.name.value] }),
         {}
       );
       if (command) {
@@ -128,19 +127,9 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
           if (!id) {
             throw new Error(`only query ${queryType} supplied, but no ID`);
           }
-          // const querySel = Object.assign({}, mutationSelection, {
-          //   name: { kind: 'name', value: queryType }
-          // });
-
           const querySel = { ...mutationSelection, name: { kind: 'name', value: queryType } };
           const selectionSet = { kind: 'SelectionSet', selections: [querySel] };
 
-          // const def = Object.assign({}, query.definitions[0], {
-          //   kind: 'name',
-          //   value: queryType,
-          //   operation: 'query',
-          //   selectionSet
-          // });
           const def = {
             ...query.definitions[0],
             kind: 'name',
@@ -155,6 +144,7 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
         }
         return res || null; // must no undefined return
       }
+      throw new Error('no troop command found in memory');
     }
     return null;
   };

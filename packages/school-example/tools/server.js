@@ -8,8 +8,8 @@ const webpack = require('webpack');
 const exec = util.promisify(require('child_process').exec);
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackDevServer = require('webpack-dev-server');
-const devConfig = require('../webpack.dev.config');
-const baseConfig = require('../base.config.js');
+const devConfig = require('../config/webpack.dev.config');
+const baseConfig = require('../config/base.config.js');
 
 const buildDLL = 'npm run dev';
 const dllRelativePath = `${baseConfig.dllRootFolder}/dev`;
