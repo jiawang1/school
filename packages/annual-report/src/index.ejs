@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>EF English Centers</title>
+  <meta id="context-root" value="<%=htmlWebpackPlugin.options.publicContext%>" />
+
+  <style type="text/css">
+    @font-face {
+      font-family: "Roboto";
+      src: url("%EC_CACHE_SERVER%/_shared/ec-ui-bootstrap/%EC_SHARED_VERSION%/shared/public/fonts/Roboto-Regular.woff") format("woff");
+      /* chrome, firefox */
+      font-style: normal;
+      font-weight: normal;
+    }
+
+    @font-face {
+      font-family: "Roboto";
+      src: url("%EC_CACHE_SERVER%/_shared/ec-ui-bootstrap/%EC_SHARED_VERSION%/shared/public/fonts/Roboto-Bold.woff") format("woff");
+      /* chrome, firefox */
+      font-style: normal;
+      font-weight: bold;
+    }
+
+    @font-face {
+      font-family: "Roboto";
+      src: url("%EC_CACHE_SERVER%/_shared/ec-ui-bootstrap/%EC_SHARED_VERSION%/shared/public/fonts/Roboto-Medium.woff") format("woff");
+      /* chrome, firefox */
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .loading {
+      position: fixed;
+      z-index: 110000;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .loading-hide {
+      display: none;
+    }
+
+    .loading .loading-container {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -0.5rem;
+      margin-left: -0.5rem;
+      width: 1rem;
+      height: 1rem;
+      text-align: center;
+    }
+
+    .loading .loading-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-style: solid;
+      border-width: 4px;
+      border-radius: 50%;
+      border-color: rgba(52, 152, 219, 0.1);
+      width: 100%;
+      height: 100%;
+    }
+
+    .loading .loading-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-style: solid;
+      border-width: 0.12rem;
+      border-radius: 50%;
+      border-color: transparent;
+      border-top-color: rgba(52, 152, 219, 0.5);
+      width: 100%;
+      height: 100%;
+      -webkit-transform: rotate(-45deg);
+      -moz-transform: rotate(-45deg);
+      -o-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      -webkit-animation: loading 1s infinite linear;
+      -moz-animation: loading 1s infinite linear;
+      -o-animation: loading 1s infinite linear;
+      -ms-animation: loading 1s infinite linear;
+      animation: loading 1s infinite linear;
+    }
+
+    @-webkit-keyframes loading {
+      0% {
+        -webkit-transform: rotate(-45deg);
+      }
+      100% {
+        -webkit-transform: rotate(315deg);
+      }
+    }
+
+    @-moz-keyframes loading {
+      0% {
+        -moz-transform: rotate(-45deg);
+      }
+      100% {
+        -moz-transform: rotate(315deg);
+      }
+    }
+
+    @-o-keyframes loading {
+      0% {
+        -o-transform: rotate(-45deg);
+      }
+      100% {
+        -o-transform: rotate(315deg);
+      }
+    }
+
+    @-ms-keyframes loading {
+      0% {
+        -ms-transform: rotate(-45deg);
+      }
+      100% {
+        -ms-transform: rotate(315deg);
+      }
+    }
+
+    @keyframes loading {
+      0% {
+        transform: rotate(-45deg);
+      }
+      100% {
+        transform: rotate(315deg);
+      }
+    }
+  </style>
+  <script type="application/javascript">
+    (function flexible(window, document) {
+      var docEl = document.documentElement
+      var dpr = window.devicePixelRatio || 1
+      var maxWidth = document.getElementsByTagName('html')[0].getAttribute('maxWidth') || 540
+
+      // adjust body font size
+      function setBodyFontSize() {
+        if (document.body) {
+          document.body.style.fontSize = (12 * dpr) + 'px'
+        }
+        else {
+          document.addEventListener('DOMContentLoaded', setBodyFontSize)
+        }
+      }
+      setBodyFontSize();
+
+      // set 1rem = viewWidth / 10
+      // 540 is the max device width(Sony Xperia C4),
+      // found at https://material.io/devices/
+      // you can set maxWidth on html node, like <html maxWidth="560">
+      function setRemUnit() {
+        var clientWidth = docEl.clientWidth > maxWidth ? maxWidth : docEl.clientWidth
+        var rem = clientWidth / 10
+        docEl.style.fontSize = rem + 'px'
+      }
+
+      setRemUnit()
+
+      // reset rem unit on page resize
+      window.addEventListener('resize', setRemUnit)
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+          setRemUnit()
+        }
+      })
+
+      // detect 0.5px supports
+      if (dpr >= 2) {
+        var fakeBody = document.createElement('body')
+        var testElement = document.createElement('div')
+        testElement.style.border = '.5px solid transparent'
+        fakeBody.appendChild(testElement)
+        docEl.appendChild(fakeBody)
+        if (testElement.offsetHeight === 1) {
+          docEl.classList.add('hairlines')
+        }
+        docEl.removeChild(fakeBody)
+      }
+    }(window, document))
+
+  </script>
+</head>
+
+<body>
+  <script type="text/javascript" src="<%=htmlWebpackPlugin.options.dllName%>"></script>
+  <div id="loading" class="loading">
+    <div class="loading-container">
+      <div class="loading-border"></div>
+      <div class="loading-animation"></div>
+    </div>
+  </div>
+</body>
+
+</html>
