@@ -11,7 +11,7 @@ module.exports = {
       ...['components', 'resolvers', 'services', 'common', 'routes', 'styles', 'containers'].reduce(
         (obj, key) => {
           // eslint-disable-next-line
-          obj[key] = `${contextPath}/${key}`;
+          obj[key] = `${contextPath}/${key}/`;
           return obj;
         },
         {}

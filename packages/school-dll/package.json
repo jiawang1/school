@@ -26,5 +26,6 @@
   "devDependencies": {
     "webpack": "^4.1.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "private": true
 }
