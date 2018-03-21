@@ -5,16 +5,16 @@ import Report from './report';
 
 const Routes = ({ redirectTo }) => (
   <React.Fragment>
-    <Switch>
-      {redirectTo ? <Redirect from="/" exact to={redirectTo} /> : null}
-      <Logonpage />
-      <Report />
-    </Switch>
+    <Logonpage />
+    <Report />
   </React.Fragment>
 );
 
 export default ({ redirectTo }) => (
   <HashRouter>
-    <Routes redirectTo={redirectTo} />
+    <Switch>
+      {redirectTo ? <Redirect from="/" exact to={redirectTo} /> : null}
+      <Routes redirectTo={redirectTo} />
+    </Switch>
   </HashRouter>
 );

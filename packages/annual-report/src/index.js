@@ -20,12 +20,12 @@ render(
 );
 
 if (process.env.NODE_ENV !== 'production' && module.hot) {
-  module.hot.accept('./routes', () => {
+  module.hot.accept('containers/App', () => {
     /*
        * must load the entry module here, therwise hot replaod can
        * not work
        * */
-    const RootContainer = require('./routes').default;
+    const RootContainer = require('containers/App').default;
     render(
       <AppContainer>
         <ApolloProvider client={client}>
