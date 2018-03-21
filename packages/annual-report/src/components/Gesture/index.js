@@ -1,1 +1,0 @@
-export { default as AlloyFinger } from './alloyfinger.js';
