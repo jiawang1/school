@@ -9,9 +9,9 @@ const commandDiff = 'lerna updated --json';
 let envirnPath = path.join(__dirname, '../packages');
 let commandBuild = 'npm run dist';
 /* eslint-enable */
-
+/* eslint-disable no-console */
 const params = process.argv.slice(2);
-const forceBuild = params.indexOf('--force') >= 0;
+const targetProjectName = params[1];
 
 const buildDLL = async () => {
   const dllprojectsBuildPath = path.join(envirnPath, 'school-dll');
@@ -24,32 +24,34 @@ const buildDLL = async () => {
   console.log(`DLL building done at ${new Date()}`);
   return true;
 };
+
+const buildProject = (f, mode = 'm') => {
+  const projectsBuildPath = path.join(envirnPath, f);
+  const child = exec(`${commandBuild} -- mode ${mode}`, { cwd: projectsBuildPath });
+
+  return new Promise((res, rej) => {
+    child.stdout.on('data', data => {
+      console.log(`${f} : ${data}`);
+    });
+    child.stderr.on('data', data => {
+      console.log(`${f} :  warning ${data}`);
+    });
+    child.on('error', error => {
+      console.error(`build project ${f} failed`);
+      console.error(error);
+      rej(error);
+    });
+    child.on('exit', () => {
+      res();
+    });
+  });
+};
 /**
  * this function used to build projects except project DLL
  * @param  {} files: projects folder
  */
 const runBuildParall = files => {
-  files.filter(f => f.indexOf('school-dll') < 0 && f.indexOf('.') !== 0).map(f => {
-    const projectsBuildPath = path.join(envirnPath, f);
-    const child = exec(commandBuild, { cwd: projectsBuildPath });
-
-    return new Promise((res, rej) => {
-      child.stdout.on('data', data => {
-        console.log(`${f} : ${data}`);
-      });
-      child.stderr.on('data', data => {
-        console.log(`${f} :  warning ${data}`);
-      });
-      child.on('error', error => {
-        console.error(`build project ${f} failed`);
-        console.error(error);
-        rej(error);
-      });
-      child.on('exit', () => {
-        res();
-      });
-    });
-  });
+  files.filter(f => f.indexOf('school-dll') < 0 && f.indexOf('.') !== 0).map(f => buildProject(f));
 };
 
 /**
@@ -57,14 +59,9 @@ const runBuildParall = files => {
  * @param  boolean force: if true, will re-builde all projects, else, only build projects
  *  changed
  */
-const buildProjects = async force => {
-  if (force) {
-    console.log('all projects will be built');
-    const files = fs.readdirSync(envirnPath);
-    if (!await buildDLL()) {
-      return;
-    }
-    runBuildParall(files);
+const buildProjects = async () => {
+  if (targetProjectName) {
+    buildProject(targetProjectName, 's');
   } else {
     const { err, stdout } = await execPromise(commandDiff);
     if (err) {
@@ -94,4 +91,4 @@ const buildProjects = async force => {
   }
 };
 
-buildProjects(forceBuild);
+buildProjects();

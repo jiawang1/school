@@ -5,6 +5,8 @@ const path = require('path');
 const fs = require('fs');
 const shell = require('shelljs');
 const webpack = require('webpack');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const config = require('../config/webpack.dist.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseConfig = require('../config/base.config');
@@ -17,12 +19,16 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 /* eslint-enable */
 /* eslint-disable no-console */
 const DLL_VAR_NAME = 'DLL';
+const DLL_NOT_FOUND = 'DLL_NOT_FOUND';
 const params = process.argv.slice(2);
 const showAnalyze = params.indexOf('--analyze') >= 0;
 const contextRoot =
   params.indexOf('--contextRoot') >= 0
     ? params[params.indexOf('--contextRoot') + 1]
     : baseConfig.defaultContext;
+
+const shouldBuildDll =
+  params.indexOf('mode') >= 0 ? params[params.indexOf('mode') + 1] === 's' : false;
 
 // Clean folder
 console.log('start to build front end resources');
@@ -44,8 +50,9 @@ const buildApp = () => {
     console.log(`found DLL file ${dllName}`);
   } catch (err) {
     console.error('manifest or DLL file not found , build process stopped');
-    console.error(err);
-    throw err;
+    const error = new Error('manifest or DLL file not found');
+    error.errorCode = DLL_NOT_FOUND;
+    throw error;
   }
   config.output = {
     path: path.join(buildFolder, './static'),
@@ -96,9 +103,20 @@ const buildApp = () => {
         path.join(buildFolder, './static/index.html'),
         path.join(buildFolder, './index.html')
       );
+      shell.cp('-R', `${dllFolder}/*`, `${buildFolder}/static/`);
       console.log('Done, build time: ', (new Date().getTime() - start) / 1000, 's');
     }
   });
 };
 
-buildApp();
+try {
+  buildApp();
+} catch (err) {
+  if (err.errorCode === DLL_NOT_FOUND && shouldBuildDll) {
+    exec('npm run dist', { cwd: path.join(__dirname, '../../school-dll') })
+      .then(buildApp)
+      .catch(error => console.error(error));
+  } else {
+    throw err;
+  }
+}

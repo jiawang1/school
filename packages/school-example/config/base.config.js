@@ -18,12 +18,11 @@ const __exports = {
 if (process.env.NODE_ENV === 'development') {
   try {
     const devConfig = require('./base.config.dev');
-    if (typeof devConfig === 'object') {
+    if (devConfig) {
       Object.assign(__exports, devConfig);
     }
   } catch (err) {
     // ignore
   }
 }
-
-export default __exports;
+module.exports = __exports;

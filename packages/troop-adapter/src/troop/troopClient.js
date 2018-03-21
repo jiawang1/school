@@ -36,6 +36,7 @@ const __fetch = _method => async (url, option, payload) => {
   try {
     return await fetch(__url, ops);
   } catch (err) {
+    // eslint-disable-next-line
     console.error(err.stack || err);
     throw err;
   }
@@ -73,7 +74,7 @@ const query = (url, queryStr, options = {}) => troopQuery(url, queryStr, options
 
 const postCommand = (url, body, options = {}) => troopCommand(url, body, options);
 
-export const troopClient = {
+export default {
   get,
   post,
   put,
