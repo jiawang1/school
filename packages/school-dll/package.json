@@ -1,6 +1,6 @@
 {
   "name": "@shanghai/school-dll",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "DLL shared for all packages",
   "main": "./tools/buildDll.js",
   "scripts": {

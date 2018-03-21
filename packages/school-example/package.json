@@ -1,6 +1,6 @@
 {
   "name": "school-example",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "an example base on school",
   "scripts": {
     "start": "node ./tools/server.js",
@@ -14,8 +14,8 @@
   },
   "author": "Wang jia",
   "dependencies": {
-    "@shanghai/apollo-link-async": "^0.0.3",
-    "@shanghai/troop-adapter": "^0.0.2",
+    "@shanghai/apollo-link-async": "^0.0.4",
+    "@shanghai/troop-adapter": "^0.0.3",
     "antd": "^3.2.1",
     "apollo-link-context": "^1.0.7",
     "graphql-type-json": "^0.2.0",
@@ -24,7 +24,7 @@
     "zen-observable": "^0.8.6"
   },
   "devDependencies": {
-    "@shanghai/school-dll": "^0.1.1",
+    "@shanghai/school-dll": "^0.1.2",
     "@storybook/react": "^3.3.11",
     "babel-plugin-import": "^1.6.5",
     "mocha": "^5.0.1",
