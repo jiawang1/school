@@ -14,7 +14,7 @@
   },
   "author": "Wang jia",
   "dependencies": {
-    "@shanghai/apollo-link-async": "^0.0.2",
+    "@shanghai/apollo-link-async": "^0.0.3",
     "@shanghai/troop-adapter": "^0.0.2",
     "apollo-link-context": "^1.0.7",
     "graphql-type-json": "^0.2.0",
