@@ -1,6 +1,6 @@
 {
   "name": "@shanghai/school-dll",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DLL shared for all packages",
   "main": "./tools/buildDll.js",
   "scripts": {
@@ -12,16 +12,16 @@
   ],
   "author": "Jay Wang",
   "dependencies": {
-    "whatwg-fetch": "^2.0.3",
-    "prop-types": "^15.6.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-router-dom": "^4.2.2",
     "apollo-cache-inmemory": "^1.1.9",
     "apollo-client": "^2.2.5",
     "graphql": "0.13.0",
     "graphql-tag": "^2.8.0",
-    "react-apollo": "^2.0.4"
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-apollo": "^2.0.4",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "webpack": "^4.1.0"

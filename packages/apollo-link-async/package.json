@@ -1,8 +1,10 @@
 {
   "name": "@shanghai/apollo-link-async",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "request to non-graphql server",
-  "main": "./lib/index.js",
+  "main": "dist/apollo-link-async.bundle.js",
+  "module": "es/apollo-link-async.bundle.js",
+  "jsnext:main": "es/apollo-link-async.bundle.js",
   "scripts": {
     "dist": "rollup -c --environment production",
     "dev": "rollup -c --watch --environment NODE_ENV:development",
