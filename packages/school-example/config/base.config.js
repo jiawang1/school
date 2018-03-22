@@ -1,12 +1,17 @@
+const DLLProjectName = 'school-dll';
+const distRelativePath = '../../dist/';
+
 const __exports = {
   defaultContext: '',
   troopContext: '/services/api',
   troopQueryContext: '/services/api/proxy/queryproxy',
+  DLLProjectName,
   publicPath: '',
   manifestName: 'vendors-manifest.json',
   webpackDevServerPort: 8012,
-  distRelativePath: '../../dist/', // relative path from your project root to dist folder
-  dllRootFolder: '../../dist/@shanghai/school-dll/',
+  distRelativePath, // relative path from your project root to dist folder
+  dllRootFolder: `${distRelativePath}@shanghai/${DLLProjectName}/`,
+  allowedHosts: [],
   proxyAddress: 'www.englishtown.com' // just for wepack dev server proxy
 };
 

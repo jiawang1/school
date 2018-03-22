@@ -4,8 +4,8 @@
   "description": "an example base on school",
   "scripts": {
     "start": "node ./tools/server.js",
-    "build": "node ./tools/build.js --build",
-    "dist": "node ./tools/build.js --dist",
+    "build": "node ./tools/build.js",
+    "dist": "npm run test && npm run build",
     "test": "find ./test -name '*.test.js' | xargs ./node_modules/.bin/_mocha --recursive ",
     "st": "./node_modules/.bin/_mocha --",
     "analyze": "node ./tools/build.js --dist -- --analyze",

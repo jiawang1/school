@@ -83,7 +83,7 @@ try {
   startDevServer();
 } catch (err) {
   console.log('manifest or DLL file not found , start to build DLL');
-  exec(buildDLL, { cwd: path.join(__dirname, '../../school-dll') })
+  exec(buildDLL, { cwd: path.join(__dirname, `../../${baseConfig.DLLProjectName}`) })
     .then(startDevServer)
     .catch(error => console.error(error));
 }

@@ -113,7 +113,7 @@ try {
   buildApp();
 } catch (err) {
   if (err.errorCode === DLL_NOT_FOUND && shouldBuildDll) {
-    exec('npm run dist', { cwd: path.join(__dirname, '../../school-dll') })
+    exec('npm run dist', { cwd: path.join(__dirname, `../../${baseConfig.DLLProjectName}`) })
       .then(buildApp)
       .catch(error => console.error(error));
   } else {

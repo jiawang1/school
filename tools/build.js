@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const exec = require('child_process').exec;
 const execPromise = util.promisify(exec);
 const commandDiff = 'lerna updated --json';
+const DLLName = 'school-dll';
 let envirnPath = path.join(__dirname, '../packages');
 let commandBuild = 'npm run dist';
 /* eslint-enable */
@@ -14,7 +15,7 @@ const params = process.argv.slice(2);
 const targetProjectName = params[1];
 
 const buildDLL = async () => {
-  const dllprojectsBuildPath = path.join(envirnPath, 'school-dll');
+  const dllprojectsBuildPath = path.join(envirnPath, DLLName);
   const { err } = await execPromise(commandBuild, { cwd: dllprojectsBuildPath });
   if (err) {
     console.error(`DLL building failed caused by:`);
@@ -51,7 +52,7 @@ const buildProject = (f, mode = 'm') => {
  * @param  {} files: projects folder
  */
 const runBuildParall = files => {
-  files.filter(f => f.indexOf('school-dll') < 0 && f.indexOf('.') !== 0).map(f => buildProject(f));
+  files.filter(f => f.indexOf(DLLName) < 0 && f.indexOf('.') !== 0).map(f => buildProject(f));
 };
 
 /**
@@ -80,7 +81,7 @@ const buildProjects = async () => {
       return project.name.replace(/^@[^/]+\//, '');
     });
     let files;
-    if (projects.some(project => project.indexOf('school-dll') >= 0)) {
+    if (projects.some(project => project.indexOf(DLLName) >= 0)) {
       if (!await buildDLL()) {
         return;
       }

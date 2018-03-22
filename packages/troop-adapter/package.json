@@ -6,7 +6,8 @@
   "module": "es/troop-adapter.bundle.js",
   "jsnext:main": "es/troop-adapter.bundle.js",
   "scripts": {
-    "dist": "rollup -c --environment production",
+    "dist": "npm run test && npm run build",
+    "build":"rollup -c --environment production",
     "test": "find ./test -name '*.test.js' | xargs ./node_modules/.bin/_mocha --recursive ",
     "st": "./node_modules/.bin/_mocha --",
     "dev": "rollup -c --watch --environment NODE_ENV:development"
