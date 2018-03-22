@@ -1,12 +1,59 @@
 import React, { Component } from 'react';
 import { withApollo, graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Tree, Select } from 'antd';
+import { Tree, Select, Button } from 'antd';
 import PropTypes from 'prop-types';
 
 const { TreeNode } = Tree;
 const { Option } = Select;
 let seq = 0;
+
+const enrollmentQuery = gql`
+  query queryEnrollment($id: String!) {
+    student_course_enrollment(id: $id) {
+      id
+      studentCourseId
+      studentLevelId
+      studentUnitId
+      studentLessonId
+      studentLevel @troop(type: "student_level") {
+        id
+        levelName
+        templateLevelId
+        progress {
+          score
+        }
+        children @troop(type: "student_unit") {
+          unitName
+          progress {
+            score
+          }
+        }
+      }
+      studentCourse @troop(type: "student_course") {
+        id
+        courseName
+        courseLocation @troop(type: "student_course_enrollment") {
+          id
+        }
+      }
+    }
+  }
+`;
+const _fragment = gql`
+  fragment enrollment on student_course_enrollment {
+    studentLevelId
+    studentUnitId
+    studentLessonId
+    studentCourse @troop(type: "student_course") {
+      id
+      courseName
+      courseLocation @troop(type: "student_course_enrollment") {
+        id
+      }
+    }
+  }
+`;
 
 class CourseTab extends Component {
   constructor() {
@@ -34,7 +81,35 @@ class CourseTab extends Component {
       });
     }
   }
+  handleChange() {
+    const { client } = this.props;
+    const result = client.readQuery({
+      query: enrollmentQuery,
+      variables: { id: 'current' }
+    });
+    result.student_course_enrollment[0].studentLevel.levelName = 'hahahaha';
+    result.student_course_enrollment[0].studentLevelId = '1';
 
+    client.writeQuery({
+      query: enrollmentQuery,
+      data: {
+        student_course_enrollment: result.student_course_enrollment[0]
+      }
+    });
+
+    const fragment = client.readFragment({
+      id: 'student_course_enrollment:student_course_enrollment!current',
+      fragment: _fragment
+    });
+    console.log(fragment);
+
+    const __enrollment = { ...fragment, studentUnitId: 'modified_in_cache' };
+    client.writeFragment({
+      id: 'student_course_enrollment:student_course_enrollment!current',
+      fragment: _fragment,
+      data: __enrollment
+    });
+  }
   renderTreeNodes(data) {
     const __renderNode = _data =>
       Object.keys(_data).map(k => {
@@ -75,6 +150,16 @@ class CourseTab extends Component {
               <Option value="20000585">十级</Option>
               <Option value="20000527">五级</Option>
             </Select>
+            <span style={{ marginLeft: '20px' }}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  this.handleChange();
+                }}
+              >
+                show update cache
+              </Button>
+            </span>
           </div>
           <span>enrollment ID :</span>
           <span>{enrollment.id}</span>
@@ -87,40 +172,9 @@ class CourseTab extends Component {
   }
 }
 
-const enrollmentQuery = gql`
-  query queryEnrollment($id: String!) {
-    student_course_enrollment(id: $id) {
-      id
-      studentCourseId
-      studentLevelId
-      studentUnitId
-      studentLessonId
-      studentLevel @troop(type: "student_level") {
-        id
-        levelName
-        templateLevelId
-        progress {
-          score
-        }
-        children @troop(type: "student_unit") {
-          unitName
-          progress {
-            score
-          }
-        }
-      }
-      studentCourse @troop(type: "student_course") {
-        id
-        courseName
-        courseLocation @troop(type: "student_course_enrollment") {
-          id
-        }
-      }
-    }
-  }
-`;
 /* eslint-disable react/require-default-props */
 CourseTab.propTypes = {
+  client: PropTypes.object.isRequired,
   updateEnrollment: PropTypes.func,
   data: PropTypes.object
 };
