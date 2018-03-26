@@ -32,5 +32,10 @@ export default {
       );
       return troopClient.query(config.troopQueryContext, _troopquery, { troopContext });
     }
+  },
+  Mutation: {
+    inputObject: (root, { inObject }) => {
+      console.log(inObject);
+    }
   }
 };
