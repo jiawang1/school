@@ -15,9 +15,13 @@
     [
       "transform-runtime",
       {
-        "polyfill": false
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
       }
-    ]
+    ],
+    "external-helpers"
   ],
   "env": {
     "test": {

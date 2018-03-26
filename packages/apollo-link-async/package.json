@@ -3,14 +3,11 @@
   "version": "0.0.4",
   "description": "request to non-graphql server",
   "main": "dist/apollo-link-async.bundle.js",
-  "module": "es/apollo-link-async.bundle.js",
-  "jsnext:main": "es/apollo-link-async.bundle.js",
   "scripts": {
-    "dist": "rollup -c --environment production",
-    "dev": "rollup -c --watch --environment NODE_ENV:development",
+    "dist": "rollup -c --environment NODE_ENV:production",
     "test": "mocha --recursive",
     "lint": "eslint ./src",
-    "build": "npm run clean && npm run build:commonjs",
+    "build": "rollup -c --watch --environment NODE_ENV:development",
     "precommit": "npm run lint && npm test"
   },
   "author": "Wang Jia",
@@ -19,6 +16,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-2": "^6.24.1",
     "eslint": "^4.18.2",
@@ -32,12 +30,12 @@
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.2",
     "rollup-plugin-sizes": "^0.4.2",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-uglify": "^3.0.0",
+    "zen-observable": "^0.8.8"
   },
   "dependencies": {
     "apollo-link": "^1.2.1",
-    "graphql-anywhere": "^4.1.5",
-    "zen-observable": "^0.8.6"
+    "graphql-anywhere": "^4.1.5"
   },
   "files": [
     "/dist/**",
