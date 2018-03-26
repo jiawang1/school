@@ -5,6 +5,7 @@ const webpackConfig = require('./webpack.config');
 
 const contextPath = path.join(__dirname, '../src');
 module.exports = Object.assign({}, webpackConfig, {
+  mode: 'production',
   devtool: false,
   context: contextPath, // eslint-disable-line
   entry: {

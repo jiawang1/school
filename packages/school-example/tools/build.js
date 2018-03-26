@@ -18,7 +18,6 @@ const buildFolder = path.join(distFolder, projectName);
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /* eslint-enable */
 /* eslint-disable no-console */
-const DLL_VAR_NAME = 'DLL';
 const DLL_NOT_FOUND = 'DLL_NOT_FOUND';
 const params = process.argv.slice(2);
 const showAnalyze = params.indexOf('--analyze') >= 0;
@@ -67,8 +66,7 @@ const buildApp = () => {
     new webpack.DllReferencePlugin({
       //  include dll
       manifest: manifestFile,
-      context: path.join(__dirname, '../..'),
-      name: DLL_VAR_NAME
+      context: path.join(__dirname, '../..')
     })
   );
   config.plugins.push(

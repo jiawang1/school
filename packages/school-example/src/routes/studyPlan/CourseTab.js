@@ -89,6 +89,7 @@ class CourseTab extends Component {
     });
     result.student_course_enrollment[0].studentLevel.levelName = 'hahahaha';
     result.student_course_enrollment[0].studentLevelId = '1';
+    result.student_course_enrollment[0].id = 'student_course_enrollment!new';
 
     client.writeQuery({
       query: enrollmentQuery,
@@ -101,7 +102,6 @@ class CourseTab extends Component {
       id: 'student_course_enrollment:student_course_enrollment!current',
       fragment: _fragment
     });
-    console.log(fragment);
 
     const __enrollment = { ...fragment, studentUnitId: 'modified_in_cache' };
     client.writeFragment({
@@ -175,7 +175,7 @@ class CourseTab extends Component {
 /* eslint-disable react/require-default-props */
 CourseTab.propTypes = {
   client: PropTypes.object.isRequired,
-  updateEnrollment: PropTypes.func,
+  updateEnrollment: PropTypes.func.isRequired,
   data: PropTypes.object
 };
 

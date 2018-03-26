@@ -2,19 +2,20 @@
   "name": "@shanghai/troop-adapter",
   "version": "0.0.3",
   "description": "support basic troop feature",
-  "main": "dist/troop-adapter.bundle.js",
+  "main": "dist/troop-adapter.bundle.min.js",
   "module": "es/troop-adapter.bundle.js",
   "jsnext:main": "es/troop-adapter.bundle.js",
   "scripts": {
-    "dist": "npm run build",
-    "build":"rollup -c --environment production",
+    "dist": "rollup -c --environment NODE_ENV:production",
+    "build":"rollup -c --environment NODE_ENV:development",
     "test": "find ./test -name '*.test.js' | xargs ./node_modules/.bin/_mocha --recursive ",
     "st": "./node_modules/.bin/_mocha --",
     "dev": "rollup -c --watch --environment NODE_ENV:development"
   },
   "author": "Wang jia",
   "dependencies": {
-    "invariant": "^2.2.2"
+    "invariant": "^2.2.2",
+    "babel-runtime": "^6.26.0"
   },
   "peerDependencies": {
     "prop-types": "^15.6.0",
@@ -30,7 +31,6 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
-    "babel-runtime": "^6.26.0",
     "mocha": "^5.0.1",
     "rollup": "^0.56.3",
     "rollup-plugin-babel": "^3.0.3",
