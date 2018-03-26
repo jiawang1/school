@@ -3,6 +3,7 @@
   "version": "0.0.5",
   "description": "request to non-graphql server",
   "main": "dist/apollo-link-async.bundle.min.js",
+  "module": "es/apollo-link-async.bundle.js",
   "scripts": {
     "dist": "rollup -c --environment NODE_ENV:production",
     "test": "mocha --recursive",
@@ -30,12 +31,12 @@
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.2",
     "rollup-plugin-sizes": "^0.4.2",
-    "rollup-plugin-uglify": "^3.0.0",
-    "zen-observable": "^0.8.8"
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "dependencies": {
     "apollo-link": "^1.2.1",
-    "graphql-anywhere": "^4.1.5"
+    "graphql-anywhere": "^4.1.5",
+    "zen-observable": "^0.8.8"
   },
   "files": [
     "/dist/**",

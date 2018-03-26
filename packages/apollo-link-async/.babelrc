@@ -20,8 +20,7 @@
         "regenerator": true,
         "moduleName": "babel-runtime"
       }
-    ],
-    "external-helpers"
+    ]
   ],
   "env": {
     "test": {
