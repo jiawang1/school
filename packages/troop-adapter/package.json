@@ -7,15 +7,15 @@
   "jsnext:main": "es/troop-adapter.bundle.js",
   "scripts": {
     "dist": "rollup -c --environment NODE_ENV:production",
-    "build":"rollup -c --environment NODE_ENV:development",
+    "build": "rollup -c --environment NODE_ENV:development",
     "test": "find ./test -name '*.test.js' | xargs ./node_modules/.bin/_mocha --recursive ",
     "st": "./node_modules/.bin/_mocha --",
     "dev": "rollup -c --watch --environment NODE_ENV:development"
   },
   "author": "Wang jia",
   "dependencies": {
-    "invariant": "^2.2.2",
-    "babel-runtime": "^6.26.0"
+    "babel-runtime": "^6.26.0",
+    "invariant": "^2.2.2"
   },
   "peerDependencies": {
     "prop-types": "^15.6.0",
