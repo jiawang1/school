@@ -1,6 +1,6 @@
 {
   "name": "school-example",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "an example base on school",
   "scripts": {
     "start": "node ./tools/server.js",
@@ -14,7 +14,7 @@
   },
   "author": "Wang jia",
   "dependencies": {
-    "@shanghai/apollo-link-async": "^0.0.5",
+    "@shanghai/apollo-link-async": "^0.0.6",
     "@shanghai/troop-adapter": "^0.0.4",
     "antd": "^3.2.1",
     "apollo-link-context": "^1.0.7",
