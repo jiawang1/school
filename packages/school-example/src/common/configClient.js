@@ -3,9 +3,9 @@ import { ApolloLink } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createAsyncLink, createProgressLink } from '@shanghai/apollo-link-async';
 import { troopClient } from '@shanghai/troop-adapter';
+import { progresshandler } from 'components/spin';
 import { createContextLink } from './troopContext';
 import baseConfig from '../../config/base.config';
-import progresshandler from 'components/spin';
 
 const cache = new InMemoryCache();
 
@@ -14,15 +14,6 @@ const graphqlWrapper = {
     troopClient.query(baseConfig.troopQueryContext, url, { troopContext }),
   mutate: (commandName, body, ops) => troopClient.postCommand(commandName, body, ops).then(() => {})
 };
-
-// const progresshandler = {
-//   show: () => {
-//     console.log('show');
-//   },
-//   hide: () => {
-//     console.log('hide');
-//   }
-// };
 
 /**
  * @param  {} resolver : graphql resolver
