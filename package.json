@@ -8,8 +8,8 @@
     "hoist": "lerna bootstrap --hoist",
     "update": "lerna updated",
     "lint": "eslint ./packages/** --ignore-path .gitignore",
-    "dist:school-example":"node ./tools/build.js -- school-example",
-    "dist:@shanghai/troop-adapter":"node ./tools/build.js -- @shanghai/troop-adapter"
+    "dist:school-example": "node ./tools/build.js -- school-example",
+    "dist:@shanghai/troop-adapter": "node ./tools/build.js -- @shanghai/troop-adapter"
   },
   "devDependencies": {
     "autoprefixer": "^8.1.0",

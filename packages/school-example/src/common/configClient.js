@@ -3,7 +3,7 @@ import { ApolloLink } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createAsyncLink, createProgressLink } from '@shanghai/apollo-link-async';
 import { troopClient } from '@shanghai/troop-adapter';
-import { progresshandler } from 'components/spin';
+import { progresshandler } from 'components/loadingBar/LoadingBar';
 import { createContextLink } from './troopContext';
 import baseConfig from '../../config/base.config';
 

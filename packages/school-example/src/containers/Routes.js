@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react';
 import { HashRouter } from 'react-router-dom';
-import StudyPlanPage from '../routes/studyPlan';
-import Logonpage from '../routes/logon';
-import LoadingBar from 'components/spin';
+import LoadingBar from 'components/loadingBar/LoadingBar';
+import StudyPlanPage from 'routes/studyPlan';
+import Logonpage from 'routes/logon';
 
 const Routes = () => (
   <React.Fragment>
