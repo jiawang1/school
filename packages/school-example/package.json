@@ -1,6 +1,6 @@
 {
   "name": "school-example",
-  "version": "0.1.6-beta.0",
+  "version": "0.1.6",
   "description": "an example base on school",
   "scripts": {
     "start": "node ./tools/server.js",
