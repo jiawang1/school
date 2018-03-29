@@ -1,6 +1,6 @@
 {
   "name": "@school/troop-adapter",
-  "version": "0.0.5-beta.0",
+  "version": "0.0.5-beta.1",
   "description": "support basic troop feature",
   "main": "dist/troop-adapter.bundle.min.js",
   "module": "es/troop-adapter.bundle.js",
