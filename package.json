@@ -6,7 +6,7 @@
     "dist": "node ./tools/build.js",
     "init": "npm install lerna && lerna bootstrap --hoist ",
     "hoist": "lerna bootstrap --hoist",
-    "update": "lerna updated",
+    "update": "lerna updated --json",
     "lint": "eslint ./packages/** --ignore-path .gitignore",
     "dist:school-example": "node ./tools/build.js -- school-example",
     "dist:@shanghai/troop-adapter": "node ./tools/build.js -- @shanghai/troop-adapter"

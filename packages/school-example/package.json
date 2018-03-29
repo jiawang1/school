@@ -29,7 +29,7 @@
     "babel-plugin-import": "^1.6.5",
     "eslint-import-resolver-webpack-alias": "^0.1.0",
     "mocha": "^5.0.1",
-    "webpack": "^4.1.0"
+    "webpack": "4.1.0"
   },
   "license": "MIT",
   "private": true
