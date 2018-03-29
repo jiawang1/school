@@ -20,7 +20,7 @@
     "apollo-link-context": "^1.0.7",
     "graphql-type-json": "^0.2.0",
     "lodash.merge": "^4.6.1",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.20.3",
     "zen-observable": "^0.8.6"
   },
   "devDependencies": {

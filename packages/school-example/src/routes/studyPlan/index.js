@@ -1,6 +1,6 @@
 import { Route } from 'react-router-dom';
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { graphql, Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import StudyPlanPage from './StudyPlanPage';
 
@@ -21,10 +21,18 @@ const userQuery = gql`
     }
   }
 `;
-const StudyPlanPageWithData = graphql(userQuery, {
-  options: {
-    variables: { id: 'current' }
-  }
-})(StudyPlanPage);
+const StudyPlanPageWithData = () => {
+  return (
+    <Query query={userQuery} variables={{ id: 'current' }}>
+      {({ data }) => <StudyPlanPage data={data} />}
+    </Query>
+  );
+};
+
+// const StudyPlanPageWithData =  graphql(userQuery, {
+//   options: {
+//     variables: { id: 'current' }
+//   }
+// })(StudyPlanPage);
 
 export default () => <Route path="/studyplan" component={StudyPlanPageWithData} />;
