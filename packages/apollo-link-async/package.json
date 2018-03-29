@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "apollo-link": "^1.2.1",
-    "graphql-anywhere": "^4.1.5",
+    "graphql-anywhere": "^4.1.8",
     "zen-observable": "^0.8.8"
   },
   "files": [
