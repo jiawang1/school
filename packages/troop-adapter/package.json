@@ -1,6 +1,6 @@
 {
   "name": "@shanghai/troop-adapter",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "support basic troop feature",
   "main": "dist/troop-adapter.bundle.min.js",
   "module": "es/troop-adapter.bundle.js",
@@ -23,7 +23,6 @@
     "react-dom": "^16.2.0",
     "whatwg-fetch": "^2.0.3"
   },
-
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-external-helpers": "^6.22.0",
