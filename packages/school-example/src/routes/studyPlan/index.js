@@ -1,6 +1,6 @@
 import { Route } from 'react-router-dom';
 import React from 'react';
-import { graphql, Query } from 'react-apollo';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import StudyPlanPage from './StudyPlanPage';
 
@@ -21,13 +21,11 @@ const userQuery = gql`
     }
   }
 `;
-const StudyPlanPageWithData = () => {
-  return (
-    <Query query={userQuery} variables={{ id: 'current' }}>
-      {({ data }) => <StudyPlanPage data={data} />}
-    </Query>
-  );
-};
+const StudyPlanPageWithData = () => (
+  <Query query={userQuery} variables={{ id: 'current' }}>
+    {({ data }) => <StudyPlanPage data={data} />}
+  </Query>
+);
 
 // const StudyPlanPageWithData =  graphql(userQuery, {
 //   options: {

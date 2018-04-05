@@ -56,6 +56,10 @@ const _fragment = gql`
 `;
 
 class CourseTab extends Component {
+  static getDerivedStateFromProps(nextProps) {
+    const { data: { student_course_enrollment = {} } } = nextProps; // eslint-disable-line
+    return { data: student_course_enrollment };
+  }
   constructor() {
     super();
     this.state = {
@@ -63,14 +67,6 @@ class CourseTab extends Component {
     };
     this.templateId = null;
   }
-
-  componentWillReceiveProps(next) {
-    const { data: { student_course_enrollment = {} } } = next; // eslint-disable-line
-    this.setState({
-      data: student_course_enrollment
-    });
-  }
-
   updateEnrollment(e) {
     const { updateEnrollment } = this.props;
     if (this.templateId !== e) {
@@ -90,6 +86,8 @@ class CourseTab extends Component {
     result.student_course_enrollment[0].studentLevel.levelName = 'hahahaha';
     result.student_course_enrollment[0].studentLevelId = '1';
     result.student_course_enrollment[0].id = 'student_course_enrollment!new';
+
+    client.writeData({ data: { test: 1 } }); // param could be: id and data
 
     client.writeQuery({
       query: enrollmentQuery,

@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import getTroopConnector from './troopConnector';
 
 export default class TroopWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.connector = getTroopConnector();
+  }
   getChildContext() {
     return {
       connector: this.connector
     };
-  }
-
-  componentWillMount() {
-    this.connector = getTroopConnector();
   }
 
   render() {

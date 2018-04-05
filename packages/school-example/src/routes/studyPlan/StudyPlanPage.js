@@ -13,10 +13,6 @@ const { TabPane } = Tabs;
 const blurbList = ['450052', '443583', '150622'];
 
 class StudyPlanPage extends Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
   loadCommand() {
     const { client } = this.props;
 
@@ -34,7 +30,6 @@ class StudyPlanPage extends Component {
   loadBlurb() {
     const { client } = this.props;
     queryBlurb(client, blurbList).then(data => {
-      console.log(data);
       this.setState({
         blurb: data.data.blurb
       });
@@ -44,10 +39,9 @@ class StudyPlanPage extends Component {
   loadSchema() {
     const { client } = this.props;
     querySchema(client).then(data => {
-      console.log(data);
-      // this.setState({
-      //   blurb: data.data.blurb
-      // });
+      this.setState({
+        blurb: data.data.blurb
+      });
     });
   }
 
@@ -146,6 +140,7 @@ class StudyPlanPage extends Component {
       </TabPane>
     );
   }
+
   render() {
     return (
       <div className="study-plan">

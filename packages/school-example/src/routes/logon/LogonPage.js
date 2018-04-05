@@ -11,6 +11,10 @@ import './LogonPage.less';
 const InputGroup = Input.Group;
 
 class LogonPage extends Component {
+  static getDerivedStateFromProps(nextProps) {
+    const { message } = nextProps;
+    return message ? message : null; // eslint-disable-line  no-unneeded-ternary
+  }
   constructor() {
     super();
     this.state = {
@@ -19,15 +23,6 @@ class LogonPage extends Component {
       message: ''
     };
   }
-  componentWillReceiveProps(next) {
-    const { message } = next;
-    if (message) {
-      this.setState({
-        message
-      });
-    }
-  }
-
   handleLogon() {
     const { history, client } = this.props;
     if (this.state.userName && this.state.password) {
