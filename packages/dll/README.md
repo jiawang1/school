@@ -1,4 +1,4 @@
-# school-dll
+# dll
 open source libraries, include following parts:
 - react
 - react-dom

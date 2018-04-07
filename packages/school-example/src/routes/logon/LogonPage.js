@@ -23,7 +23,7 @@ class LogonPage extends Component {
       message: ''
     };
   }
-  handleLogon() {
+  handleLogon = () => {
     const { history, client } = this.props;
     if (this.state.userName && this.state.password) {
       const { password, userName } = this.state;
@@ -54,14 +54,14 @@ class LogonPage extends Component {
         message: 'Please input user name and password'
       });
     }
-  }
+  };
 
-  handleInput(e) {
+  handleInput = e => {
     this.setState({
       [e.target.id]: e.target.value,
       message: ''
     });
-  }
+  };
 
   render() {
     return (
@@ -74,12 +74,8 @@ class LogonPage extends Component {
                   id="userName"
                   addonBefore="User Name"
                   value={this.state.userName}
-                  onPressEnter={() => {
-                    this.handleLogon();
-                  }}
-                  onChange={(...args) => {
-                    this.handleInput(...args);
-                  }}
+                  onPressEnter={this.handleLogon}
+                  onChange={this.handleInput}
                 />
               </Col>
             </div>
@@ -89,13 +85,9 @@ class LogonPage extends Component {
                   id="password"
                   type="password"
                   addonBefore="Password"
-                  onPressEnter={() => {
-                    this.handleLogon();
-                  }}
+                  onPressEnter={this.handleLogon}
                   value={this.state.password}
-                  onChange={(...args) => {
-                    this.handleInput(...args);
-                  }}
+                  onChange={this.handleInput}
                 />
               </Col>
             </div>
@@ -103,9 +95,7 @@ class LogonPage extends Component {
           <Button
             type="primary"
             style={{ float: 'right', marginRight: 10, marginTop: 20 }}
-            onClick={() => {
-              this.handleLogon();
-            }}
+            onClick={this.handleLogon}
           >
             Logon
           </Button>

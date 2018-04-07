@@ -13,7 +13,11 @@ const { TabPane } = Tabs;
 const blurbList = ['450052', '443583', '150622'];
 
 class StudyPlanPage extends Component {
-  loadCommand() {
+  constructor() {
+    super();
+    this.state = {};
+  }
+  loadCommand = () => {
     const { client } = this.props;
 
     queryCommand(client)
@@ -25,16 +29,16 @@ class StudyPlanPage extends Component {
       .catch(err => {
         console.log(err);
       });
-  }
+  };
 
-  loadBlurb() {
+  loadBlurb = () => {
     const { client } = this.props;
     queryBlurb(client, blurbList).then(data => {
       this.setState({
         blurb: data.data.blurb
       });
     });
-  }
+  };
 
   loadSchema() {
     const { client } = this.props;
@@ -93,24 +97,14 @@ class StudyPlanPage extends Component {
           <div> current user : {data.user ? data.user[0].member_id : ''}</div>
         </div>
         <div className="study-plan-section">
-          <Button
-            type="primary"
-            onClick={() => {
-              this.loadCommand();
-            }}
-          >
+          <Button type="primary" onClick={this.loadCommand}>
             load command
           </Button>
           {this.__renderCommand(this.state.command)}
         </div>
 
         <div className="study-plan-section">
-          <Button
-            type="primary"
-            onClick={() => {
-              this.loadBlurb();
-            }}
-          >
+          <Button type="primary" onClick={this.loadBlurb}>
             load blurb
           </Button>
           {this.__renderBlurb(this.state.blurb)}

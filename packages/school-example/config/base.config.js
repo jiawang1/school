@@ -1,4 +1,4 @@
-const DLLProjectName = 'school-dll';
+const DLLProjectName = 'dll';
 const distRelativePath = '../../dist/';
 
 const __exports = {

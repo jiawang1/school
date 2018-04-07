@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const exec = require('child_process').exec;
 const execPromise = util.promisify(exec);
 const commandDiff = 'lerna updated --json';
-const DLLName = 'school-dll';
+const DLLName = 'dll';
 let envirnPath = path.join(__dirname, '../packages');
 let commandBuild = 'npm run dist';
 /* eslint-enable */

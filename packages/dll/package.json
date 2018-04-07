@@ -1,5 +1,5 @@
 {
-  "name": "@shanghai/school-dll",
+  "name": "@shanghai/dll",
   "version": "0.1.3",
   "description": "DLL shared for all packages",
   "main": "./tools/buildDll.js",

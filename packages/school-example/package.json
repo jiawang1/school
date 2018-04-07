@@ -27,7 +27,7 @@
     "webpack": "4.1.0"
   },
   "devDependencies": {
-    "@shanghai/school-dll": "^0.1.3",
+    "@shanghai/dll": "^0.1.3",
     "@storybook/react": "^3.3.11",
     "eslint-import-resolver-webpack-alias": "^0.1.0"
   },
