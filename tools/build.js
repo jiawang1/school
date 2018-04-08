@@ -80,7 +80,7 @@ const buildProjects = async () => {
     }
     console.log('following projects will be built : ');
     const projects = JSON.parse(stdout).map(project => {
-      console.log(`project ${project.name}`);
+      console.log(`project -- ${project.name}`);
 
       /**
        *  some projects published to internal NPM repo, so the
