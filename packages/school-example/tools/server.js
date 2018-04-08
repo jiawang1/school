@@ -16,36 +16,44 @@ const dllRelativePath = `${baseConfig.dllRootFolder}/dev`;
 const dllFolder = path.join(__dirname, '../', dllRelativePath);
 const folderTmp = './src/_tmp/';
 /* eslint-disable no-console */
+
+function isDLLExist() {
+  return fs.existsSync(path.join(__dirname, '/..', baseConfig.DLLProjectName));
+}
+
 function startDevServer() {
   // if DDL not exist, will throw error and trigger rebuild DLL
-
-  let manifest;
   let dllName;
-  try {
-    // eslint-disable-next-line
-    manifest = require(path.join(dllFolder, baseConfig.manifestName));
-    [dllName] = fs.readdirSync(dllFolder).filter(file => file !== baseConfig.manifestName);
-    shell.rm('-rf', folderTmp);
-    shell.mkdir(folderTmp);
-    shell.cp(`${dllFolder}/${dllName}`, folderTmp);
-  } catch (err) {
-    console.error();
-    throw err;
+  if (isDLLExist()) {
+    let manifest;
+    try {
+      // eslint-disable-next-line
+      manifest = require(path.join(dllFolder, baseConfig.manifestName));
+      [dllName] = fs.readdirSync(dllFolder).filter(file => file !== baseConfig.manifestName);
+      shell.rm('-rf', folderTmp);
+      shell.mkdir(folderTmp);
+      shell.cp(`${dllFolder}/${dllName}`, folderTmp);
+    } catch (err) {
+      console.error();
+      throw err;
+    }
+    devConfig.plugins.push(
+      new webpack.DllReferencePlugin({
+        // include dll
+        manifest
+      })
+    );
   }
   devConfig.entry = {
     main: [
       'react-hot-loader/patch',
-      `webpack-dev-server/client?http://localhost:${baseConfig.webpackDevServerPort}`,
+      `webpack-dev-server/client?http://${baseConfig.webpackDevServerAddress}:${
+        baseConfig.webpackDevServerPort
+      }`,
       'webpack/hot/only-dev-server',
       './index'
     ]
   };
-  devConfig.plugins.push(
-    new webpack.DllReferencePlugin({
-      // include dll
-      manifest
-    })
-  );
 
   let aPublicpath;
   devConfig.plugins.push(
@@ -54,7 +62,7 @@ function startDevServer() {
       fileName: 'index.html',
       template: 'index.ejs',
       inject: true,
-      dllName: path.join('/_tmp', dllName),
+      dllName: dllName ? path.join('/_tmp', dllName) : null,
       publicContext: (aPublicpath = devConfig.output.publicPath.match(/^(\/[^/]*)\/.*/)
         ? aPublicpath[1]
         : '')
@@ -82,8 +90,11 @@ function startDevServer() {
 try {
   startDevServer();
 } catch (err) {
-  console.log('manifest or DLL file not found , start to build DLL');
-  exec(buildDLL, { cwd: path.join(__dirname, `../../${baseConfig.DLLProjectName}`) })
-    .then(startDevServer)
-    .catch(error => console.error(error));
+  console.log(err);
+  if (isDLLExist()) {
+    console.log('manifest or DLL file not found , start to build DLL');
+    exec(buildDLL, { cwd: path.join(__dirname, `../../${baseConfig.DLLProjectName}`) })
+      .then(startDevServer)
+      .catch(error => console.error(error));
+  }
 }

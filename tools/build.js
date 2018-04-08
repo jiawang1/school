@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const exec = require('child_process').exec;
 const execPromise = util.promisify(exec);
 const commandDiff = 'lerna updated --json';
+const commandLs = 'lerna ls --json';
 const DLLName = 'dll';
 let envirnPath = path.join(__dirname, '../packages');
 let commandBuild = 'npm run dist';
@@ -26,9 +27,14 @@ const buildDLL = async () => {
   return true;
 };
 
-const buildProject = (f, mode = 'm') => {
+const withDLL = async () => {
+  const projects = await execPromise(commandLs);
+  return projects.some(pro => pro.split('/').slice(-1) === DLLName);
+};
+
+const buildProject = (f, hasDLL) => {
   const projectsBuildPath = path.join(envirnPath, f);
-  const child = exec(`${commandBuild} -- mode ${mode}`, { cwd: projectsBuildPath });
+  const child = exec(`${commandBuild} -- hasDLL ${hasDLL}`, { cwd: projectsBuildPath });
 
   return new Promise((res, rej) => {
     child.stdout.on('data', data => {
@@ -51,8 +57,10 @@ const buildProject = (f, mode = 'm') => {
  * this function used to build projects except project DLL
  * @param  {} files: projects folder
  */
-const runBuildParall = files => {
-  files.filter(f => f.indexOf(DLLName) < 0 && f.indexOf('.') !== 0).map(f => buildProject(f));
+const runBuildParall = (files, hasDLL) => {
+  files
+    .filter(f => f.indexOf(DLLName) < 0 && f.indexOf('.') !== 0)
+    .map(f => buildProject(f, hasDLL));
 };
 
 /**
@@ -61,8 +69,9 @@ const runBuildParall = files => {
  *  changed
  */
 const buildProjects = async () => {
+  const hasDLL = await withDLL();
   if (targetProjectName) {
-    buildProject(targetProjectName, 's');
+    buildProject(targetProjectName, hasDLL);
   } else {
     const { err, stdout } = await execPromise(commandDiff);
     if (err) {
@@ -88,7 +97,7 @@ const buildProjects = async () => {
       files = fs.readdirSync(envirnPath);
     }
     // if DLL changed, all projects should be re-build
-    runBuildParall(files || projects);
+    runBuildParall(files || projects, hasDLL);
   }
 };
 

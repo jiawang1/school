@@ -8,7 +8,9 @@
 </head>
 
 <body>
-  <script type="text/javascript" src="<%=htmlWebpackPlugin.options.dllName%>"></script>
+  <%if(htmlWebpackPlugin.options.dllName){%>
+    <script type="text/javascript" src="<%=htmlWebpackPlugin.options.dllName%>"></script>
+    <%}%>
 </body>
 
 </html>
