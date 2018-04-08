@@ -123,10 +123,7 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
         });
         const queryType = troop.type(info);
         if (queryType) {
-          const id = troop.id(info) || args.id;
-          if (!id) {
-            throw new Error(`only query ${queryType} supplied, but no ID`);
-          }
+          const id = troop.id(info) || args.id || '*';
           const querySel = { ...mutationSelection, name: { kind: 'name', value: queryType } };
           const selectionSet = { kind: 'SelectionSet', selections: [querySel] };
 
