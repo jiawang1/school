@@ -26,13 +26,23 @@ const contextRoot =
   params.indexOf('--contextRoot') >= 0
     ? params[params.indexOf('--contextRoot') + 1]
     : baseConfig.defaultContext;
-const hasDLL = params.indexOf('hasDLL') >= 0 ? params[params.indexOf('hasDLL') + 1] : true;
+const hasDLL = params.indexOf('hasDLL') >= 0 ? params[params.indexOf('hasDLL') + 1] : false;
 
 // Clean folder
 console.log('start to build front end resources');
-shell.rm('-rf', buildFolder);
-shell.mkdir(buildFolder);
-shell.mkdir(`${buildFolder}/static`);
+const cleanUpDist = () => {
+  if (fs.existsSync(buildFolder)) {
+    shell.rm('-rf', buildFolder);
+  }
+  if (!fs.existsSync(distFolder)) {
+    shell.mkdir(distFolder);
+  }
+  shell.mkdir(buildFolder);
+  shell.mkdir(`${buildFolder}/static`);
+};
+
+cleanUpDist();
+
 console.log(`clear dist folder ${buildFolder}`);
 
 const addDLLPlugin = () => {
@@ -47,7 +57,7 @@ const addDLLPlugin = () => {
     console.log(`found manifest file ${path.join(dllFolder, baseConfig.manifestName)}`);
     console.log(`found DLL file ${dllName}`);
   } catch (err) {
-    console.error('manifest or DLL file not found , build process stopped');
+    console.error('manifest or DLL file not found');
     const error = new Error('manifest or DLL file not found');
     error.errorCode = DLL_NOT_FOUND;
     throw error;
@@ -60,6 +70,22 @@ const addDLLPlugin = () => {
       context: path.join(__dirname, '../..')
     })
   );
+  return dllName;
+};
+
+const buildApp = () => {
+  const start = new Date().getTime();
+  console.log(`start to build main resources at ${start}`);
+  let dllName;
+  if (hasDLL) {
+    dllName = addDLLPlugin();
+  } else {
+    console.log('build without webpack DLL');
+  }
+  if (showAnalyze) {
+    config.plugins.push(new BundleAnalyzerPlugin({ generateStatsFile: true }));
+  }
+
   config.output = {
     path: path.join(buildFolder, './static'),
     filename: `[name].bundle.[hash:8].js`,
@@ -73,24 +99,11 @@ const addDLLPlugin = () => {
       fileName: 'index.html',
       template: 'index.ejs',
       inject: true,
-      dllName: config.output.publicPath + dllName,
+      dllName: dllName ? config.output.publicPath + dllName : undefined,
       publicContext: contextRoot
     })
   );
-};
 
-const buildApp = () => {
-  if (hasDLL) {
-    addDLLPlugin();
-  } else {
-    console.log('build without webpack DLL');
-  }
-  if (showAnalyze) {
-    config.plugins.push(new BundleAnalyzerPlugin({ generateStatsFile: true }));
-  }
-
-  const start = new Date().getTime();
-  console.log(`start to build main resources at ${start}`);
   webpack(config, (err, stats) => {
     if (err || stats.hasErrors()) {
       if (err) {
@@ -111,7 +124,7 @@ const buildApp = () => {
         path.join(buildFolder, './static/index.html'),
         path.join(buildFolder, './index.html')
       );
-      shell.cp('-R', `${dllFolder}/*`, `${buildFolder}/static/`);
+      hasDLL && shell.cp('-R', `${dllFolder}/*`, `${buildFolder}/static/`);
       console.log('Done, build time: ', (new Date().getTime() - start) / 1000, 's');
     }
   });
@@ -121,6 +134,7 @@ try {
   buildApp();
 } catch (err) {
   if (err.errorCode === DLL_NOT_FOUND && hasDLL) {
+    console.log('start to build DLL');
     exec('npm run dist', { cwd: path.join(__dirname, `../../${baseConfig.DLLProjectName}`) })
       .then(buildApp)
       .catch(error => console.error(error));

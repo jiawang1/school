@@ -12,6 +12,13 @@
     "dist:school-example": "node ./tools/build.js -- school-example",
     "dist:@shanghai/troop-adapter": "node ./tools/build.js -- @shanghai/troop-adapter"
   },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.englishtown.cn:7999/~jay.wang/school.git"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
     "eslint": "^4.18.2",
@@ -22,7 +29,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.5.0",
     "eslint-plugin-react": "^7.0.1",
-    "lerna": "^2.9.1",
+    "lerna": "^2.10.0",
     "prettier": "^1.10.2",
     "react-hot-loader": "^4.0.0",
     "react-test-renderer": "^16.2.0",
