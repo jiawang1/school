@@ -16,8 +16,10 @@ class StudyPlanPage extends Component {
   constructor() {
     super();
     this.state = {};
+    this.loadCommand = this.loadCommand.bind(this);
+    this.loadBlurb = this.loadBlurb.bind(this);
   }
-  loadCommand = () => {
+  loadCommand() {
     const { client } = this.props;
 
     queryCommand(client)
@@ -29,16 +31,16 @@ class StudyPlanPage extends Component {
       .catch(err => {
         console.log(err);
       });
-  };
+  }
 
-  loadBlurb = () => {
+  loadBlurb() {
     const { client } = this.props;
     queryBlurb(client, blurbList).then(data => {
       this.setState({
         blurb: data.data.blurb
       });
     });
-  };
+  }
 
   loadSchema() {
     const { client } = this.props;

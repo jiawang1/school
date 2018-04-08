@@ -124,7 +124,9 @@ const buildApp = () => {
         path.join(buildFolder, './static/index.html'),
         path.join(buildFolder, './index.html')
       );
-      hasDLL && shell.cp('-R', `${dllFolder}/*`, `${buildFolder}/static/`);
+      if (hasDLL) {
+        shell.cp('-R', `${dllFolder}/*`, `${buildFolder}/static/`);
+      }
       console.log('Done, build time: ', (new Date().getTime() - start) / 1000, 's');
     }
   });

@@ -22,8 +22,10 @@ class LogonPage extends Component {
       password: '',
       message: ''
     };
+    this.handleLogon = this.handleLogon.bind(this);
+    this.handleInput = this.handleInput.bind(this);
   }
-  handleLogon = () => {
+  handleLogon() {
     const { history, client } = this.props;
     if (this.state.userName && this.state.password) {
       const { password, userName } = this.state;
@@ -54,14 +56,14 @@ class LogonPage extends Component {
         message: 'Please input user name and password'
       });
     }
-  };
+  }
 
-  handleInput = e => {
+  handleInput(e) {
     this.setState({
       [e.target.id]: e.target.value,
       message: ''
     });
-  };
+  }
 
   render() {
     return (
