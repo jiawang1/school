@@ -12,7 +12,13 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "lint": "eslint ./src/**"
   },
-  "author": "Wang jia",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.englishtown.cn:7999/~jay.wang/school.git"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
   "dependencies": {
     "@shanghai/apollo-link-async": "^0.0.8-beta.0",
     "@shanghai/troop-adapter": "^0.0.6-0",
