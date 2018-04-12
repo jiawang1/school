@@ -22,7 +22,7 @@ const __serialize = (node, oCache) => {
   let result = node;
 
   if ('id' in node) {
-     id = node.id; // eslint-disable-line
+    id = node.id; // eslint-disable-line
     if (Object.prototype.hasOwnProperty.call(deserializeCache, id)) {
       result = deserializeCache[id];
       if (node.collapsed) {
@@ -106,7 +106,7 @@ export const troopQuery = async (url, jointQuery, options) => {
     const serialObject = serialize(json);
     return ids.map(id => serialObject[id]);
   } catch (err) {
-    console.error(err);
+    console.error(err); // eslint-disable-line
     throw err;
   }
 };
@@ -125,7 +125,7 @@ export const troopCommand = async (url, content, options) => {
     const response = await fetch(__url, fetchOptions);
     return response.json();
   } catch (err) {
-    console.error(err);
+    console.error(err); // eslint-disable-line
     throw err;
   }
 };

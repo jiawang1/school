@@ -26,7 +26,8 @@ const contextRoot =
   params.indexOf('--contextRoot') >= 0
     ? params[params.indexOf('--contextRoot') + 1]
     : baseConfig.defaultContext;
-const hasDLL = params.indexOf('hasDLL') >= 0 ? params[params.indexOf('hasDLL') + 1] : false;
+const hasDLL =
+  params.indexOf('hasDLL') >= 0 ? params[params.indexOf('hasDLL') + 1] === 'true' : false;
 
 // Clean folder
 console.log('start to build front end resources');

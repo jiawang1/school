@@ -12,7 +12,7 @@ const cache = new InMemoryCache();
 const graphqlWrapper = {
   query: (url, troopContext) =>
     troopClient.query(baseConfig.troopQueryContext, url, { troopContext }),
-  mutate: (commandName, body, ops) => troopClient.postCommand(commandName, body, ops).then(() => {})
+  mutate: (commandName, body, ops) => troopClient.postCommand(commandName, body, ops)
 };
 
 /**

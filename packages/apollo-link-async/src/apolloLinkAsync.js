@@ -3,6 +3,12 @@ import Observable from 'zen-observable';
 import { graphql } from 'graphql-anywhere/lib/async';
 import utils from './utils';
 
+/**
+ *  derective troop supports three parameter:
+ *  type: troop resource type
+ *  command: troop command
+ *  id: resource id for response of mutation
+ */
 const troop = {};
 ['type', 'command', 'id'].forEach(key => {
   troop[key] = info => info.directives && info.directives.troop && info.directives.troop[key];

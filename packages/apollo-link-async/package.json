@@ -41,5 +41,6 @@
   "files": [
     "/dist/**",
     "/es/**"
-  ]
+  ],
+  "publishConfig":{"registry":"https://nexus3-cnshhq.englishtown.com/repository/npm-shanghai/"}
 }

@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const resolve = require('./config/webpack.config.js').resolve;
 module.exports = {
   settings: {

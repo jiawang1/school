@@ -29,7 +29,16 @@ const buildDLL = async () => {
 
 const withDLL = async () => {
   const projects = await execPromise(commandLs);
-  return projects.some(pro => pro.split('/').slice(-1) === DLLName);
+  if (projects && projects.stdout) {
+    try {
+      const aProjects = JSON.parse(projects.stdout);
+      return aProjects.some(pro => pro.name.split('/').slice(-1) === DLLName);
+    } catch (err) {
+      console.log(err); // eslint-disable-line
+      return false;
+    }
+  }
+  return false;
 };
 
 const buildProject = (f, hasDLL) => {

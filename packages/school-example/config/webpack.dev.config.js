@@ -24,7 +24,7 @@ module.exports = Object.assign({}, webpackConfig, {
   },
   devServer: {
     contentBase: contextPath,
-    allowedHosts: baseConfig.allowedHosts ||[],
+    allowedHosts: baseConfig.allowedHosts || [],
     /* eslint-enable */
     proxy: [
       {
