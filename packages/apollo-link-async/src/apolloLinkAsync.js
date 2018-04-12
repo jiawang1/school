@@ -93,15 +93,17 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
     return graphqlClient.query(__query, currentContext);
   };
 
+  const readCacheByNormalizeKey = (cache, key) => {
+    if (cache && cache.data && cache.data.data) {
+      return cache.data.data[key];
+    }
+    return null;
+  };
+
   const getCommandFromCache = (cache, fieldName) => {
-    if (
-      cache &&
-      cache.data &&
-      cache.data.data &&
-      cache.data.data['command:command!*'] &&
-      cache.data.data['command:command!*'].results
-    ) {
-      const { results: { json } } = cache.data.data['command:command!*'];
+    const commandCache = readCacheByNormalizeKey(cache, 'command:command!*');
+    if (commandCache && commandCache.results) {
+      const { results: { json } } = commandCache;
       return json ? json[fieldName] : null;
     }
     return null;

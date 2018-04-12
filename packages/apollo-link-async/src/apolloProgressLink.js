@@ -33,14 +33,14 @@ const createProgressLink = progresshandler => {
             errors
           });
         },
-        error: () => {
-          observerErrorHandler();
+        error: err => {
+          observerErrorHandler(err);
           if (!skipShowProgress) {
             resolveRequest(requestHash);
           }
         },
-        complete: () => {
-          observerCompleteHandler();
+        complete: data => {
+          observerCompleteHandler(data);
           if (!skipShowProgress) {
             resolveRequest(requestHash);
           }
