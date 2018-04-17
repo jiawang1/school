@@ -133,7 +133,7 @@ const createAsyncLink = (graphqlAdapter, resolvers = {}) => {
       } = commandCache;
       return json ? json[fieldName] : null;
     }
-    console.log('no troop command found in cache');
+    console.log('No troop command found in cache'); // eslint-disable-line
     return null;
   };
 
