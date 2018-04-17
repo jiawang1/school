@@ -51,15 +51,27 @@ export const constructTroopQuery = (selections, parent) => {
     return query;
   }, parent);
 };
+
 /**
  * @param  {} query
  * @param  {} field
  */
-export const getSelection = (query, field) =>
-  query.definitions[0] &&
-  query.definitions[0].selectionSet &&
-  query.definitions[0].selectionSet.selections &&
-  query.definitions[0].selectionSet.selections.find(sel => sel.name.value === field);
+export const getSelection = (query, field) => {
+  let selection;
+  query.definitions.some(def => {
+    if (def.selectionSet && def.selectionSet.selections) {
+      return def.selectionSet.selections.some(sel => {
+        if (sel.name.value === field) {
+          selection = sel;
+          return true;
+        }
+        return false;
+      });
+    }
+    return false;
+  });
+  return selection;
+};
 
 /**
  * @param  {} directives
