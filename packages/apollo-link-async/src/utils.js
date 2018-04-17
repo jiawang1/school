@@ -1,5 +1,5 @@
 const __isType = type => oTarget =>
-  Object.prototype.toString.call(oTarget).replace(/^.*\s(.*)]$/, '$1') === type;
+  Object.prototype.toString.call(oTarget).replace(/^\[.*\s(.*)\]$/, '$1') === type;
 
 /**
  * export functions:

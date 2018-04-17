@@ -14,6 +14,19 @@ const troop = {};
   troop[key] = info => info.directives && info.directives.troop && info.directives.troop[key];
 });
 
+const isQueryResult = Symbol('isQueryResult');
+
+const markAsQueryResult = obj => {
+  if (utils.isObject(obj) && !obj[isQueryResult]) {
+    Object.defineProperty(obj, isQueryResult, {
+      value: true
+    });
+  } else if (utils.isArray(obj)) {
+    obj.map(markAsQueryResult);
+  }
+  return obj;
+};
+
 /**
  *  this method used to generate troop style query string
  * @param  {} selections : graphql AST selections. should include all query fields
@@ -69,15 +82,26 @@ export const getTypeFromDirective = directives => {
   return type;
 };
 
+const adapterCheck = adapter =>
+  !!adapter && typeof adapter.query === 'function' && typeof adapter.mutate === 'function';
 /**
  * @param  {} resolvers : customize graphql resolvers , used to supply data for data type or fields.
  *                        This resolver has higher priority than default resolver.
- * @param  {} graphqlClient : request client shoudl provide methods query and mutate
+ * @param  {} graphqlAdapter : request client shoudl provide methods query and mutate
  */
-const createAsyncLink = (graphqlClient, resolvers = {}) => {
+const createAsyncLink = (graphqlAdapter, resolvers = {}) => {
+  if (!adapterCheck(graphqlAdapter)) {
+    throw new Error('graphqlAdapter should be an object with method query and mutate');
+  }
   const schema = { types: [] };
 
-  const defaultQueryResolver = (fieldName, rootValue, args, { currentContext, query }, info) => {
+  const defaultQueryResolver = async (
+    fieldName,
+    rootValue,
+    args,
+    { currentContext, query },
+    info
+  ) => {
     const id = args && args.id;
     if (!id) return null;
 
@@ -90,7 +114,8 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
     } else {
       __query = `${prefix}!${id}${condition}`;
     }
-    return graphqlClient.query(__query, currentContext);
+    const result = await graphqlAdapter.query(__query, currentContext);
+    return markAsQueryResult(result);
   };
 
   const readCacheByNormalizeKey = (cache, key) => {
@@ -103,9 +128,12 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
   const getCommandFromCache = (cache, fieldName) => {
     const commandCache = readCacheByNormalizeKey(cache, 'command:command!*');
     if (commandCache && commandCache.results) {
-      const { results: { json } } = commandCache;
+      const {
+        results: { json }
+      } = commandCache;
       return json ? json[fieldName] : null;
     }
+    console.log('no troop command found in cache');
     return null;
   };
 
@@ -125,27 +153,32 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
         {}
       );
       if (command) {
-        const res = await graphqlClient.mutate(command.url, body, {
-          troopContext: currentContext,
-          headers: { 'content-type': command.contentType }
-        });
+        const res = await graphqlAdapter.mutate(command, body, currentContext);
         const queryType = troop.type(info);
         if (queryType) {
-          const id = troop.id(info) || args.id || '*';
-          const querySel = { ...mutationSelection, name: { kind: 'name', value: queryType } };
-          const selectionSet = { kind: 'SelectionSet', selections: [querySel] };
+          const id = troop.id(info);
+          if (id) {
+            /** both queryType and ID supplied will trigger query again */
+            const querySel = { ...mutationSelection, name: { kind: 'name', value: queryType } };
+            const selectionSet = { kind: 'SelectionSet', selections: [querySel] };
 
-          const def = {
-            ...query.definitions[0],
-            kind: 'name',
-            value: queryType,
-            operation: 'query',
-            selectionSet
-          };
+            const def = {
+              ...query.definitions[0],
+              kind: 'name',
+              value: queryType,
+              operation: 'query',
+              selectionSet
+            };
 
-          const folkQuery = { definitions: [def], kind: 'Document' };
+            const folkQuery = { definitions: [def], kind: 'Document' };
+            // eslint-disable-next-line
+            return resolver(queryType, {}, { id }, { currentContext, query: folkQuery, cache }, {});
+          }
+          /** only queryType supplied, this case should be data returned by mutation, res should
+           * include all data required by mutation, so just put res as root to construct result
+           */
           // eslint-disable-next-line
-          return resolver(queryType, {}, { id }, { currentContext, query: folkQuery, cache }, {});
+          return resolver(queryType, { queryType: res }, { id }, { currentContext, cache }, {});
         }
         return res || null; // must no undefined return
       }
@@ -187,13 +220,16 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
     const fieldValue = rootValue[fieldName];
 
     // If fieldValue is defined, server returned a value
-    if (fieldValue !== undefined) return fieldValue;
+    if (fieldValue !== undefined) return markAsQueryResult(fieldValue);
     // do not resolve __typename in resolver, just generate __typename after this method
     if (fieldName === '__typename') return null;
 
     // Look for the field in the custom resolver mapresolvers
-    const { query } = context;
     let resolverMap = null;
+    const { query } = context;
+    if (!query) {
+      throw new Error(`rootValue does not include fieldName : ${fieldName}`);
+    }
 
     if (query.definitions[0].operation === 'query') {
       resolverMap = resolvers.Query || resolvers.query;
@@ -203,6 +239,13 @@ const createAsyncLink = (graphqlClient, resolvers = {}) => {
 
     if (resolverMap && resolverMap[fieldName]) {
       return resolverMap[fieldName](rootValue, args, context, info);
+    }
+    /**
+     * nested opreation is not support, choose customize resolver way,
+     * current field assigned to null
+     */
+    if (rootValue[isQueryResult]) {
+      return null;
     }
     return defaultResolver(fieldName, rootValue, args, context, info);
   };

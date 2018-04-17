@@ -3,11 +3,11 @@ import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { ApolloProvider } from 'react-apollo';
 import config from './common/configClient';
-import resolves from './server';
+// import resolves from './server';
 import RootApp from './containers/Routes';
 import './styles/index.less';
 
-const client = config(resolves);
+const client = config();
 const root = document.createElement('div');
 root.className = 'app-root';
 root.id = 'app-root';

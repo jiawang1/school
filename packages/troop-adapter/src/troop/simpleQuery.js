@@ -129,3 +129,11 @@ export const troopCommand = async (url, content, options) => {
     throw err;
   }
 };
+
+export const troopCommandWithObject = async (oCommand, content, troopContext) => {
+  const { url } = oCommand;
+  return troopCommand(url, content, {
+    troopContext,
+    headers: { 'content-type': oCommand.contentType }
+  });
+};

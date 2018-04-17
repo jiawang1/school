@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 import invariant from 'invariant';
-import { troopQuery, troopCommand } from './simpleQuery';
+import { troopQuery, troopCommand, troopCommandWithObject as postCommandWithObject } from './simpleQuery';
 import utils from './utils';
 
 const mimeType = {
@@ -81,5 +81,6 @@ export default {
   DELETE,
   query,
   postCommand,
+  postCommandWithObject,
   postForm
 };

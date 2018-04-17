@@ -9,10 +9,11 @@ import baseConfig from '../../config/base.config';
 
 const cache = new InMemoryCache();
 
-const graphqlWrapper = {
-  query: (url, troopContext) =>
-    troopClient.query(baseConfig.troopQueryContext, url, { troopContext }),
-  mutate: (commandName, body, ops) => troopClient.postCommand(commandName, body, ops)
+const graphqlAdapter = {
+  query: (troopQuery, troopContext) =>
+    troopClient.query(baseConfig.troopQueryContext, troopQuery, { troopContext }),
+  mutate: (command, body, troopContext) =>
+    troopClient.postCommandWithObject(command, body, troopContext)
 };
 
 /**
@@ -20,7 +21,7 @@ const graphqlWrapper = {
  * @param  {} middlewares=[] : apollo links
  */
 const config = (resolver, middlewares = []) => {
-  const asyncLink = createAsyncLink(graphqlWrapper, resolver);
+  const asyncLink = createAsyncLink(graphqlAdapter, resolver);
   const progressLink = createProgressLink(progresshandler);
   const client = new ApolloClient({
     link: ApolloLink.from([

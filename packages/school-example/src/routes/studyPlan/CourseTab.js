@@ -190,6 +190,27 @@ const updateEnrollment = gql`
       studentLevelId
       studentUnitId
       studentLessonId
+      studentLevel @troop(type: "student_level") {
+        id
+        levelName
+        templateLevelId
+        progress {
+          score
+        }
+        children @troop(type: "student_unit") {
+          unitName
+          progress {
+            score
+          }
+        }
+      }
+      studentCourse @troop(type: "student_course") {
+        id
+        courseName
+        courseLocation @troop(type: "student_course_enrollment") {
+          id
+        }
+      }
     }
   }
 `;
