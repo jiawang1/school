@@ -16,6 +16,12 @@ const method = {
   put: 'PUT',
   DELETE: 'DELETE'
 };
+
+const logError = err => {
+  // eslint-disable-next-line
+  console.log(err.stack || err);
+};
+
 // eslint-disable-next-line
 const __fetch = _method => async (url, option, payload) => {
   invariant(url !== undefined, 'URL must be supplied');
@@ -36,8 +42,7 @@ const __fetch = _method => async (url, option, payload) => {
   try {
     return await fetch(__url, ops);
   } catch (err) {
-    // eslint-disable-next-line
-    console.error(err.stack || err);
+    logError(err);
     throw err;
   }
 };
@@ -47,6 +52,58 @@ const post = __fetch(method.post);
 const put = __fetch(method.put);
 const DELETE = __fetch(method.DELETE);
 
+const checkStatus = response => {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  }
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
+};
+
+export const getJson = async (url, option = {}) => {
+  const _option = { ...option };
+  if (_option.headers) {
+    _option.headers.Accept = mimeType.json;
+  } else {
+    _option.headers = {
+      Accept: mimeType.json
+    };
+  }
+  try {
+    const response = await get(url, _option);
+    return checkStatus(response).json();
+  } catch (err) {
+    logError(err);
+    throw err;
+  }
+};
+
+/**
+ * @param  {} url : requested URL
+ * @param  {} body : request body for post
+ * @param  {} option : http request options, { headers:{},.... }
+ */
+export const postJson = async (url, body, option = {}) => {
+  const _option = { ...option };
+  if (_option.headers) {
+    _option.headers.Accept = mimeType.json;
+    _option.headers['Content-Type'] = mimeType.json;
+  } else {
+    _option.headers = {
+      'Content-Type': mimeType.json,
+      Accept: mimeType.json
+    };
+  }
+  try {
+    const response = await post(url, _option, typeof body === 'string' ? body : JSON.stringify(body));
+    return checkStatus(response).json();
+  } catch (err) {
+    logError(err);
+    throw err;
+  }
+};
+
 /**
  * @param  {} url : requested URL
  * @param  {} body : request body for post
@@ -54,7 +111,7 @@ const DELETE = __fetch(method.DELETE);
  */
 const postForm = async (url, body, option = {}) => {
   invariant(url !== undefined, 'URL must be supplied');
-  invariant(body !== undefined, 'HTTP request payload mest be supplied');
+  invariant(body !== undefined, 'HTTP request payload must be supplied');
   const _body = typeof body === 'string' ? body : utils.encode(body);
   const _option = option;
   if (_option.headers) {
@@ -66,8 +123,13 @@ const postForm = async (url, body, option = {}) => {
       Accept: mimeType.all
     };
   }
-  const response = await post(url, _option, _body);
-  return response.json();
+  try {
+    const response = await post(url, _option, _body);
+    return response.json();
+  } catch (err) {
+    logError(err);
+    throw err;
+  }
 };
 
 const query = (url, queryStr, options = {}) => troopQuery(url, queryStr, options);
@@ -79,6 +141,8 @@ export default {
   post,
   put,
   DELETE,
+  getJson,
+  postJson,
   query,
   postCommand,
   postCommandWithObject,

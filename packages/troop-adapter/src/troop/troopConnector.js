@@ -1,5 +1,8 @@
 const STARTUPEVENT = 'troop/ready';
 
+const TROOP_CONTEXT = 'troopjs';
+const TROOP_HUB = 'troopjs-core/pubsub/hub';
+
 class TroopEventConnector {
   constructor() {
     this.__troopHandler = null;
@@ -7,12 +10,9 @@ class TroopEventConnector {
       sub: [],
       pub: []
     };
-
-    if (this.__isTroopReady()) {
-      this.__registerTroopHandler();
-    } else {
-      // eslint-disable-next-line
-      const __handler = e => {
+    this.__troopHandler = this.__getTroopEventhandler();
+    if (!this.__troopHandler) {
+      const __handler = () => {
         this.__registerTroopHandler();
       };
       if (window.addEventListener) {
@@ -22,20 +22,34 @@ class TroopEventConnector {
       } else {
         throw new Error('too old browser, can not support');
       }
+    } else {
+      this.__initTroopEvent();
     }
   }
-  __isTroopReady() {
-    return (
-      !!window.requirejs &&
-      window.requirejs.s &&
-      window.requirejs.s.contexts &&
-      window.requirejs.s.contexts['troopjs-2.0'] &&
-      window.requirejs.s.contexts['troopjs-2.0'].defined['troopjs-core/pubsub/hub']
-    );
+
+  __getTroopEventhandler() {
+    let handler = null;
+    if (window.requirejs && window.requirejs.s && window.requirejs.s.contexts) {
+      Object.keys(window.requirejs.s.contexts).some(key => {
+        if (key.search(TROOP_CONTEXT) !== 0) {
+          return false;
+        }
+        if (window.requirejs.s.contexts[key][TROOP_HUB]) {
+          handler = window.requirejs.s.contexts[key][TROOP_HUB];
+          return true;
+        }
+        return false;
+      });
+    }
+    return handler;
   }
 
   __registerTroopHandler() {
-    this.__troopHandler = window.requirejs.s.contexts['troopjs-2.0'].defined['troopjs-core/pubsub/hub'];
+    this.__troopHandler = this.__getTroopEventhandler();
+    this.__initTroopEvent();
+  }
+
+  __initTroopEvent() {
     this.cache.sub.forEach(sub => {
       this.__sub(sub.eventName, this.__troopHandler, sub.cb);
     });
@@ -74,14 +88,14 @@ class TroopEventConnector {
       });
     }
   }
-  publish(eventName, data, cb) {
+  publish(eventName, data) {
     if (this.isConnected()) {
       return this.__troopHandler.publish(eventName, data);
     }
     return new Promise((res, rej) => {
       this.cache.pub.push({
         eventName,
-        cb,
+        data,
         res,
         rej
       });
@@ -102,8 +116,13 @@ class TroopEventConnector {
   }
 }
 
-const tc = new TroopEventConnector();
+let tc = null;
 
-const getTroopConnector = () => tc;
+const getTroopConnector = () => {
+  if (!tc) {
+    tc = new TroopEventConnector();
+  }
+  return tc;
+};
 
 export default getTroopConnector;
