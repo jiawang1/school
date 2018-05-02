@@ -22,7 +22,6 @@ const logError = err => {
   console.log(err.stack || err);
 };
 
-// eslint-disable-next-line
 const __fetch = _method => async (url, option, payload) => {
   invariant(url !== undefined, 'URL must be supplied');
   invariant(option !== undefined, 'HTTP request options must be supplied, ');
@@ -132,7 +131,7 @@ const postForm = async (url, body, option = {}) => {
   }
 };
 
-const query = (url, queryStr, options = {}) => troopQuery(url, queryStr, options);
+const query = (url, resource, options = {}) => troopQuery(url, resource, options);
 
 const postCommand = (url, body, options = {}) => troopCommand(url, body, options);
 
