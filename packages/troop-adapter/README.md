@@ -3,7 +3,7 @@
 provide functions to enable react application to run with troop based app together.
 
 1. troop client: supprot simple troop query/command without cache and batch, also supply basic http client functions.
-2. troop connector: event emitter and subscriber to enable react app and troop app to communicate with each other via troop Hub event. 
+2. troop connector: event emitter and subscriber to enable react app and troop app to communicate with each other via troop Hub event.
 3. TroopWrapper: HOC to inject troop connecter to react component.
 4. renderToTroop: render react component inside troop app.
 
@@ -20,3 +20,5 @@ postCommandWithObject(__(oCommand, body, troopContext) =>Promise__): a simple AP
 getJson(__(url, option)=>Promise__): http get request with JSON as parameter. url :  url for service. option: http options.
 
 postJson(__(url, body, option)=>Promise__): http post request with JSON as parameter.
+
+postForm(__(url, body, option)=>Promise__): http post request with with MIME type 'application/x-www-form-urlencoded'.url :  url for service. body: form content in JSON format. option: http options.

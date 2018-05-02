@@ -60,7 +60,7 @@ const checkStatus = response => {
   throw error;
 };
 
-export const getJson = async (url, option = {}) => {
+const getJson = async (url, option = {}) => {
   const _option = { ...option };
   if (_option.headers) {
     _option.headers.Accept = mimeType.json;
@@ -83,7 +83,7 @@ export const getJson = async (url, option = {}) => {
  * @param  {} body : request body for post
  * @param  {} option : http request options, { headers:{},.... }
  */
-export const postJson = async (url, body, option = {}) => {
+const postJson = async (url, body, option = {}) => {
   const _option = { ...option };
   if (_option.headers) {
     _option.headers.Accept = mimeType.json;
