@@ -27,6 +27,5 @@ this command will build all packages and put generated stuff in dist folder
 
 ### current packages
 
-1. [dll](https://github.com/jiawang1/truant/blob/master/packages/truant-dll/README.md): all open source libraries shared by other packages in the repo. This package will be built as webpack DLL. 
-2. [troop-adapter](https://github.com/jiawang1/truant/blob/master/packages/truant-core/README.md): provide some features to compitable with troopjs, like simple troop query without batch and cache.
-3. [school-example](https://github.com/jiawang1/truant/blob/master/packages/truant-example/README.md): an example page demenstrate how to build application base on apollo-client and troop-adapter.
+1. [troop-adapter](https://github.com/jiawang1/school/tree/master/packages/troop-adapter): provide some features to compitable with troopjs, like simple troop query without batch and cache.
+2. [school-example](https://github.com/jiawang1/school/tree/master/packages/school-example): an example page demenstrate how to build application base on apollo-client and troop-adapter.
