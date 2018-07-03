@@ -9,9 +9,13 @@ const commandQL = gql`
   }
 `;
 
-const queryCommand = (client, id = '*') =>
-  client.query({
+const queryCommand = (client, id = '*') => {
+  console.log(commandQL);
+
+  return client.query({
     query: commandQL,
     variables: { id }
   });
+};
+
 export { commandQL, queryCommand };

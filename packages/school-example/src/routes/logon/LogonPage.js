@@ -24,6 +24,9 @@ class LogonPage extends Component {
     };
     this.handleLogon = this.handleLogon.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    [1, 2, 3].find(() => {
+      console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+    });
   }
   handleLogon() {
     const { history, client } = this.props;

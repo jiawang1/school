@@ -20,20 +20,20 @@ render(
   root
 );
 
-if (process.env.NODE_ENV !== 'production' && module.hot) {
-  module.hot.accept('./containers/Routes', () => {
-    /*
-       * must load the entry module here, therwise hot replaod can
-       * not work
-       * */
-    const RootContainer = require('./containers/Routes').default;
-    render(
-      <AppContainer>
-        <ApolloProvider client={client}>
-          <RootContainer />
-        </ApolloProvider>
-      </AppContainer>,
-      root
-    );
-  });
-}
+// if (process.env.NODE_ENV !== 'production' && module.hot) {
+//   module.hot.accept('./containers/Routes', () => {
+//     /*
+//        * must load the entry module here, therwise hot replaod can
+//        * not work
+//        * */
+//     const RootContainer = require('./containers/Routes').default;
+//     render(
+//       <AppContainer>
+//         <ApolloProvider client={client}>
+//           <RootContainer />
+//         </ApolloProvider>
+//       </AppContainer>,
+//       root
+//     );
+//   });
+// }

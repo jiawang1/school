@@ -11,7 +11,9 @@ const cache = new InMemoryCache();
 
 const graphqlAdapter = {
   query: (troopQuery, troopContext) =>
-    troopClient.query(baseConfig.troopQueryContext, troopQuery, { troopContext }),
+    troopClient.query(baseConfig.troopQueryContext, troopQuery, { troopContext }).catch(err => {
+      console.log(err);
+    }),
   mutate: (command, body, troopContext) =>
     troopClient.postCommandWithObject(command, body, troopContext)
 };

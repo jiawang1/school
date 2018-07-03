@@ -46,7 +46,7 @@ function startDevServer() {
   }
   devConfig.entry = {
     main: [
-      'react-hot-loader/patch',
+      // 'react-hot-loader/patch',
       `webpack-dev-server/client?http://${baseConfig.webpackDevServerAddress}:${
         baseConfig.webpackDevServerPort
       }`,

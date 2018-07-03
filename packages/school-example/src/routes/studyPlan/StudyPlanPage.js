@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withApollo } from 'react-apollo';
 import { Button, Tabs } from 'antd';
 import PropTypes from 'prop-types';
-import { queryCommand } from '../../services/commandService';
+import { queryCommand, commandQL } from '../../services/commandService';
 import { querySchema } from '../../services/schemaService';
 import { queryBlurb } from '../../services/blurbService';
 import CourseTab from './CourseTab';
@@ -26,6 +26,10 @@ class StudyPlanPage extends Component {
       .then(data => {
         this.setState({
           command: data.data.command[0]
+        });
+        const results = client.readQuery({
+          query: commandQL,
+          variables: { id: '*' }
         });
       })
       .catch(err => {

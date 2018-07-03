@@ -16,6 +16,11 @@ const troop = {};
 
 const isQueryResult = Symbol('isQueryResult');
 
+const commandQL = `command(id: $id) {
+  id
+  results
+}`;
+
 const markAsQueryResult = obj => {
   if (utils.isObject(obj) && !obj[isQueryResult]) {
     Object.defineProperty(obj, isQueryResult, {
@@ -107,13 +112,7 @@ const createAsyncLink = (graphqlAdapter, resolvers = {}) => {
   }
   const schema = { types: [] };
 
-  const defaultQueryResolver = async (
-    fieldName,
-    rootValue,
-    args,
-    { currentContext, query },
-    info
-  ) => {
+  const defaultQueryResolver = async (fieldName, rootValue, args, { currentContext, query }, info) => {
     const id = args && args.id;
     if (!id) return null;
 
@@ -139,6 +138,19 @@ const createAsyncLink = (graphqlAdapter, resolvers = {}) => {
 
   const getCommandFromCache = (cache, fieldName) => {
     const commandCache = readCacheByNormalizeKey(cache, 'command:command!*');
+
+    const cacheKey = utils.generateQueryFromObject({
+      command: {
+        id: '*',
+        results: null
+      }
+    });
+    try {
+      const commands = cache.readQuery({ query: cacheKey });
+    } catch (e) {
+      console.log(e);
+    }
+
     if (commandCache && commandCache.results) {
       const {
         results: { json }
@@ -221,7 +233,6 @@ const createAsyncLink = (graphqlAdapter, resolvers = {}) => {
   };
   const generateServices = oService => {
     if (schema.isReady) return schema;
-
     __generate(oService);
     schema.isReady = true;
     return schema;
