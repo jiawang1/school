@@ -68,7 +68,7 @@ const addDLLPlugin = () => {
     new webpack.DllReferencePlugin({
       //  include dll
       manifest: manifestFile,
-      context: path.join(__dirname, '../..')
+      context: path.join(__dirname, '../../')
     })
   );
   return dllName;
