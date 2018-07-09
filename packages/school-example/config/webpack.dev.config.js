@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const baseConfig = require('./base.config');
 const { troopContext } = require('./base.config');
 const webpackConfig = require('./webpack.config');
@@ -43,7 +42,6 @@ module.exports = Object.assign({}, webpackConfig, {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new ExtractTextPlugin({ filename: 'styles.css' }),
     new webpack.DefinePlugin({
       ENV: '"development"',
       'process.env': {

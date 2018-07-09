@@ -3,6 +3,42 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const contextPath = path.join(__dirname, '../src');
 
+const styleLoader = mode => {
+  const loaders = [
+    {
+      loader: 'css-loader',
+      options: {
+        importLoaders: 1,
+        minimize: true
+      }
+    },
+    {
+      loader: 'postcss-loader',
+      options: {
+        ident: 'postcss',
+        plugins: () => [require('autoprefixer')()]
+      }
+    },
+    {
+      loader: 'less-loader',
+      options: {
+        paths: [path.resolve(__dirname, '../src/styles')]
+      }
+    }
+  ];
+
+  if (mode === 'production') {
+    return ExtractTextPlugin.extract({
+      fallback: 'style-loader',
+      use: [...loaders]
+    });
+  }
+  loaders.unshift({
+    loader: 'style-loader'
+  });
+  return loaders;
+};
+
 module.exports = {
   context: contextPath,
   resolve: {
@@ -30,25 +66,7 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            'css-loader',
-            {
-              loader: 'postcss-loader',
-              options: {
-                ident: 'postcss',
-                plugins: () => [require('autoprefixer')()]
-              }
-            },
-            {
-              loader: 'less-loader',
-              options: {
-                paths: [path.resolve(__dirname, '../src/styles')]
-              }
-            }
-          ]
-        })
+        use: styleLoader(this.mode)
       },
       {
         test: /\.css/,

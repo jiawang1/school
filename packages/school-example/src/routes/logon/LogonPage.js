@@ -11,10 +11,6 @@ import './LogonPage.less';
 const InputGroup = Input.Group;
 
 class LogonPage extends Component {
-  static getDerivedStateFromProps(nextProps) {
-    const { message } = nextProps;
-    return message ? message : null; // eslint-disable-line  no-unneeded-ternary
-  }
   constructor() {
     super();
     this.state = {
@@ -24,9 +20,10 @@ class LogonPage extends Component {
     };
     this.handleLogon = this.handleLogon.bind(this);
     this.handleInput = this.handleInput.bind(this);
-    [1, 2, 3].find(() => {
-      console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-    });
+  }
+  static getDerivedStateFromProps(nextProps) {
+    const { message } = nextProps;
+    return message ? message : null; // eslint-disable-line  no-unneeded-ternary
   }
   handleLogon() {
     const { history, client } = this.props;

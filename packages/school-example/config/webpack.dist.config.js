@@ -21,5 +21,16 @@ module.exports = Object.assign({}, webpackConfig, {
         NODE_ENV: JSON.stringify('production')
       }
     })
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          name: 'commons',
+          chunks: 'initial',
+          minChunks: 2
+        }
+      }
+    }
+  }
 });

@@ -56,16 +56,18 @@ const _fragment = gql`
 `;
 
 class CourseTab extends Component {
-  static getDerivedStateFromProps(nextProps) {
-    const { data: { student_course_enrollment = {} } } = nextProps; // eslint-disable-line
-    return { data: student_course_enrollment };
-  }
   constructor() {
     super();
     this.state = {
       data: {}
     };
     this.templateId = null;
+  }
+  static getDerivedStateFromProps(nextProps) {
+    const {
+      data: { student_course_enrollment = {} }
+    } = nextProps; // eslint-disable-line
+    return { data: student_course_enrollment };
   }
   updateEnrollment(e) {
     const { updateEnrollment } = this.props;
@@ -131,7 +133,9 @@ class CourseTab extends Component {
 
   render() {
     // eslint-disable-next-line
-    const { data: { student_course_enrollment } } = this.props;
+    const {
+      data: { student_course_enrollment }
+    } = this.props;
     // eslint-disable-next-line
     const enrollment = student_course_enrollment ? student_course_enrollment[0] : {};
     return (

@@ -12,3 +12,4 @@ src/_tmp/**
 **package-lock.json
 **/graphqlService/**
 **/config/base.config.dev.js
+**/.vscode
