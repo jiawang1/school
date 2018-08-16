@@ -1,43 +1,37 @@
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const contextPath = path.join(__dirname, '../src');
 
-const styleLoader = mode => {
-  const loaders = [
-    {
-      loader: 'css-loader',
-      options: {
-        importLoaders: 1,
-        minimize: true
-      }
-    },
-    {
-      loader: 'postcss-loader',
-      options: {
-        ident: 'postcss',
-        plugins: () => [require('autoprefixer')()]
-      }
-    },
-    {
-      loader: 'less-loader',
-      options: {
-        paths: [path.resolve(__dirname, '../src/styles')]
-      }
+const styleLoader = mode => [
+  {
+    loader: mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader'
+  },
+  {
+    loader: 'css-loader',
+    options: {
+      importLoaders: 1,
+      minimize: true
     }
-  ];
-
-  if (mode === 'production') {
-    return ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: [...loaders]
-    });
   }
-  loaders.unshift({
-    loader: 'style-loader'
-  });
-  return loaders;
-};
+];
+
+const lessLoader = mode => [
+  ...styleLoader(mode),
+  {
+    loader: 'postcss-loader',
+    options: {
+      ident: 'postcss',
+      plugins: () => [require('autoprefixer')()]
+    }
+  },
+  {
+    loader: 'less-loader',
+    options: {
+      paths: [path.resolve(__dirname, '../src/styles')]
+    }
+  }
+];
 
 module.exports = {
   context: contextPath,
@@ -66,18 +60,11 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: styleLoader(this.mode)
+        use: lessLoader(this.mode)
       },
       {
         test: /\.css/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader'
-          }
-        ]
+        use: styleLoader(this.mode)
       },
       {
         test: /\.(png|jpg|gif)$/,
